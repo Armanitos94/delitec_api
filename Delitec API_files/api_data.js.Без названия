@@ -1,0 +1,4518 @@
+define({ "api": [
+  {
+    "type": "delete",
+    "url": "/applications",
+    "title": "Удаления заявок",
+    "name": "DeleteMultupleApplications",
+    "group": "Applications",
+    "version": "0.1.0",
+    "description": "<p>DELETE запрос на удаление нескольких заявок.</p>",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "allowedValues": [
+              "application/json"
+            ],
+            "optional": true,
+            "field": "x-response-type",
+            "description": "<p>Формат вывода ответа (по умолчанию: application/json).</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Тело запроса, основные данные": [
+          {
+            "group": "Тело запроса, основные данные",
+            "type": "String",
+            "optional": false,
+            "field": "api_key",
+            "description": "<p>Уникальный api ключ.</p>"
+          },
+          {
+            "group": "Тело запроса, основные данные",
+            "type": "Object[]",
+            "optional": false,
+            "field": "data",
+            "description": "<p>Список заявок к удалению</p>"
+          }
+        ],
+        "Описание объекта в списке data": [
+          {
+            "group": "Описание объекта в списке data",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p>Идентификатор, по которому будет происходить удаление заявки.</p>"
+          },
+          {
+            "group": "Описание объекта в списке data",
+            "type": "String",
+            "optional": false,
+            "field": "type",
+            "description": "<p>Тип идентификатора, externalId - внешний идентификатор, systemId - внутренний идентификатор</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "Запрос (Пример):",
+        "content": "curl -X DELETE \\\nhttps://app.relog.kz/api/v2/applications \\\n-H 'content-type: application/json' \\\n-d '{\n \"api_key\": \"xxxxxxxxxxxxxx\",\n \"data\": [{\n     \"id\": \"some-id1\",\n     \"type\": \"systemId\"\n   },{\n     \"id\": \"some-id2\",\n     \"type\": \"externalId\"\n   },{\n     \"id\": \"some-id3\",\n     \"type\": \"systemId\"\n   },{\n     \"id\": \"some-id4\",\n     \"type\": \"externalId\"\n   }\n ]\n}'",
+        "type": "json"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status",
+            "description": "<p>Статус ответа.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Ответ (Пример):",
+          "content": "HTTP/1.1 200 Success\n{\n \"status\": \"success\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "server/endpoints/applications.js",
+    "groupTitle": "Applications"
+  },
+  {
+    "type": "post",
+    "url": "/applications",
+    "title": "Создание/Изменение одной заявки",
+    "name": "InsertApplication",
+    "group": "Applications",
+    "version": "0.1.0",
+    "description": "<p>POST запрос на создание или изменение заявки. Для этого вам нужны как минимум api ключ, клиент и сама заявка.</p>",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "allowedValues": [
+              "application/json",
+              "application/xml"
+            ],
+            "optional": true,
+            "field": "x-response-type",
+            "description": "<p>Формат вывода ответа (по умолчанию: application/json).</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "api_key",
+            "description": "<p>Уникальный api ключ.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "client",
+            "description": "<p>Информация о клиенте. Здесь содержится вся необходимая информация о клиете.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "application",
+            "description": "<p>Информация о заявке. Здесь содержится вся необходимая информация о заявке.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Object[]",
+            "optional": true,
+            "field": "goods",
+            "description": "<p>Информация о товарах. Здесь будут товары относящиеся к заявке.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": true,
+            "field": "options",
+            "description": "<p>Дополнительная информация о заявке.</p>"
+          }
+        ],
+        "Параметры клиента (client)": [
+          {
+            "group": "Параметры клиента (client)",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>Имя клиента.</p>"
+          },
+          {
+            "group": "Параметры клиента (client)",
+            "type": "String",
+            "optional": true,
+            "field": "phone",
+            "description": "<p>Телефон клиента ( В международном формате).</p>"
+          },
+          {
+            "group": "Параметры клиента (client)",
+            "type": "Array",
+            "optional": true,
+            "field": "allPhones",
+            "description": "<p>Дополнительные телефоны клиента ( В международном формате).</p>"
+          },
+          {
+            "group": "Параметры клиента (client)",
+            "type": "String",
+            "optional": true,
+            "field": "email",
+            "description": "<p>Email клиента.</p>"
+          },
+          {
+            "group": "Параметры клиента (client)",
+            "type": "String",
+            "optional": true,
+            "field": "description",
+            "description": "<p>Описание клиента.</p>"
+          }
+        ],
+        "Параметры заявки (application)": [
+          {
+            "group": "Параметры заявки (application)",
+            "type": "String",
+            "optional": true,
+            "field": "additionalDetails",
+            "description": "<p>Детали заказа.</p>"
+          },
+          {
+            "group": "Параметры заявки (application)",
+            "type": "String",
+            "optional": true,
+            "field": "details",
+            "description": "<p>Сведения заказа.</p>"
+          },
+          {
+            "group": "Параметры заявки (application)",
+            "type": "String",
+            "optional": true,
+            "field": "externalId",
+            "description": "<p>Внешний id.</p>"
+          },
+          {
+            "group": "Параметры заявки (application)",
+            "type": "Number",
+            "optional": true,
+            "field": "price",
+            "description": "<p>Цена заказа (считается отдельно от цены за товары).</p>"
+          },
+          {
+            "group": "Параметры заявки (application)",
+            "type": "String",
+            "optional": true,
+            "field": "priceType",
+            "description": "<p>Уникальный id типа оплаты (по дефолту берется основной тип).</p>"
+          },
+          {
+            "group": "Параметры заявки (application)",
+            "type": "Object",
+            "optional": false,
+            "field": "planDeliveryPeriod",
+            "description": "<p>Период времени когда нужно доставить.</p>"
+          },
+          {
+            "group": "Параметры заявки (application)",
+            "type": "Object",
+            "optional": false,
+            "field": "addressFrom",
+            "description": "<p>Адрес отправления, адрес откуда нужно взять заказ (При указании appType != default, можно указать null).</p>"
+          },
+          {
+            "group": "Параметры заявки (application)",
+            "type": "Object",
+            "optional": false,
+            "field": "addressTo",
+            "description": "<p>Адрес доставки, адрес куда нужно доставить заказ.</p>"
+          },
+          {
+            "group": "Параметры заявки (application)",
+            "type": "String",
+            "allowedValues": [
+              "pickUp",
+              "delivery",
+              "default"
+            ],
+            "optional": false,
+            "field": "appType",
+            "description": "<p>Тип заказа, какой тип будет у заказа: &quot;pickUp&quot; - Забор, &quot;delivery&quot; - доставка, &quot;default&quot; - Забор и Доставка.</p>"
+          },
+          {
+            "group": "Параметры заявки (application)",
+            "type": "Number",
+            "optional": true,
+            "field": "volume",
+            "description": "<p>Объем заказа (кг).</p>"
+          },
+          {
+            "group": "Параметры заявки (application)",
+            "type": "Number",
+            "optional": true,
+            "field": "weight",
+            "description": "<p>Вес заказа (м.куб).</p>"
+          },
+          {
+            "group": "Параметры заявки (application)",
+            "type": "String",
+            "optional": true,
+            "field": "requireTransportSkill",
+            "description": "<p>Категория заказа.</p>"
+          },
+          {
+            "group": "Параметры заявки (application)",
+            "type": "Number",
+            "optional": true,
+            "field": "waitTime",
+            "description": "<p>Время отгрузки (в минутах).</p>"
+          },
+          {
+            "group": "Параметры заявки (application)",
+            "type": "Number",
+            "optional": true,
+            "field": "loadTime",
+            "description": "<p>Время загрузки (в минутах).</p>"
+          },
+          {
+            "group": "Параметры заявки (application)",
+            "type": "Number",
+            "optional": true,
+            "field": "deliveryPrice",
+            "description": "<p>Цена за доставку (если вам нужно указать свою цену за доставку).</p>"
+          },
+          {
+            "group": "Параметры заявки (application)",
+            "type": "Object",
+            "optional": true,
+            "field": "sender",
+            "description": "<p>Отправитель (если у вас включен &quot;отправитель&quot;, то он обязателен).</p>"
+          },
+          {
+            "group": "Параметры заявки (application)",
+            "type": "String",
+            "optional": true,
+            "field": "_id",
+            "description": "<p>Уникальный id заявки (при указании id, обновит существующую заявку, указанными полями).</p>"
+          },
+          {
+            "group": "Параметры заявки (application)",
+            "type": "String",
+            "optional": true,
+            "field": "customId",
+            "description": "<p>Внешний номер заявки.</p>"
+          },
+          {
+            "group": "Параметры заявки (application)",
+            "type": "String",
+            "allowedValues": [
+              "new"
+            ],
+            "optional": true,
+            "field": "status",
+            "description": "<p>Меняет статус заявки из активного в новый.</p>"
+          }
+        ],
+        "Параметры времени доставки (planDeliveryPeriod)": [
+          {
+            "group": "Параметры времени доставки (planDeliveryPeriod)",
+            "type": "Number",
+            "optional": false,
+            "field": "startDate",
+            "description": "<p>Начальное время доставки, в миллисекундах (POSIX time).</p>"
+          },
+          {
+            "group": "Параметры времени доставки (planDeliveryPeriod)",
+            "type": "Number",
+            "optional": false,
+            "field": "endDate",
+            "description": "<p>Конечное время доставки, в миллисекундах (POSIX time).</p>"
+          }
+        ],
+        "Параметры адреса отправления (addressFrom)": [
+          {
+            "group": "Параметры адреса отправления (addressFrom)",
+            "type": "String",
+            "optional": false,
+            "field": "address",
+            "description": "<p>Адрес: (Город, улица, дом).</p>"
+          },
+          {
+            "group": "Параметры адреса отправления (addressFrom)",
+            "type": "Object",
+            "optional": true,
+            "field": "coords",
+            "description": "<p>Координаты адреса.</p>"
+          },
+          {
+            "group": "Параметры адреса отправления (addressFrom)",
+            "type": "String",
+            "optional": true,
+            "field": "details",
+            "description": "<p>Детали адреса.</p>"
+          }
+        ],
+        "Параметры адреса доставки (addressTo)": [
+          {
+            "group": "Параметры адреса доставки (addressTo)",
+            "type": "String",
+            "optional": false,
+            "field": "address",
+            "description": "<p>Адрес клиента: (Город, улица, дом).</p>"
+          },
+          {
+            "group": "Параметры адреса доставки (addressTo)",
+            "type": "Object",
+            "optional": true,
+            "field": "coords",
+            "description": "<p>Координаты адреса.</p>"
+          },
+          {
+            "group": "Параметры адреса доставки (addressTo)",
+            "type": "String",
+            "optional": true,
+            "field": "details",
+            "description": "<p>Детали адреса.</p>"
+          }
+        ],
+        "Параметры координат (coords)": [
+          {
+            "group": "Параметры координат (coords)",
+            "type": "Number",
+            "optional": false,
+            "field": "lat",
+            "description": "<p>Широта адреса.</p>"
+          },
+          {
+            "group": "Параметры координат (coords)",
+            "type": "Number",
+            "optional": false,
+            "field": "long",
+            "description": "<p>Долгота адреса.</p>"
+          }
+        ],
+        "Параметры Товара (goods)": [
+          {
+            "group": "Параметры Товара (goods)",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>Название товара.</p>"
+          },
+          {
+            "group": "Параметры Товара (goods)",
+            "type": "String",
+            "optional": false,
+            "field": "code",
+            "description": "<p>Код товара.</p>"
+          },
+          {
+            "group": "Параметры Товара (goods)",
+            "type": "Number",
+            "optional": false,
+            "field": "weight",
+            "description": "<p>Вес за 1 товар (кг).</p>"
+          },
+          {
+            "group": "Параметры Товара (goods)",
+            "type": "Number",
+            "optional": false,
+            "field": "volume",
+            "description": "<p>Объем за 1 товар (м.куб).</p>"
+          },
+          {
+            "group": "Параметры Товара (goods)",
+            "type": "Number",
+            "optional": false,
+            "field": "quantity",
+            "description": "<p>Количество товара.</p>"
+          },
+          {
+            "group": "Параметры Товара (goods)",
+            "type": "Number",
+            "optional": false,
+            "field": "price",
+            "description": "<p>Цена за 1 товар.</p>"
+          },
+          {
+            "group": "Параметры Товара (goods)",
+            "type": "Number",
+            "optional": false,
+            "field": "caseCoefficient",
+            "description": "<p>Коэффициент кейса за 1 товар.</p>"
+          }
+        ],
+        "Параметры Отправителя (sender)": [
+          {
+            "group": "Параметры Отправителя (sender)",
+            "type": "String",
+            "optional": true,
+            "field": "fullName",
+            "description": "<p>Имя отправителя.</p>"
+          },
+          {
+            "group": "Параметры Отправителя (sender)",
+            "type": "String",
+            "optional": true,
+            "field": "phone",
+            "description": "<p>Телефон отправителя.</p>"
+          }
+        ],
+        "Параметры Настроек (options)": [
+          {
+            "group": "Параметры Настроек (options)",
+            "type": "String",
+            "allowedValues": [
+              "replace",
+              "add",
+              "nothing"
+            ],
+            "optional": false,
+            "field": "changeGoods",
+            "description": "<p>При обновлении заявки, действие происходимое с товарами (replace - заменяет товары указанными в запросе, add - добавляет товары к существующим товарам, nothing - ничего не делает с существующими товарами заявки).</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "Запрос (Пример):",
+        "content": "curl -X POST \\\nhttps://app.relog.kz/api/v2/applications \\\n-H 'content-type: application/json' \\\n-d '{\n \"api_key\": \"xxxxxxxxxxxxxx\",\n \"client\": {\n   \"phone\": \"7702xxxxxxx\",\n   \"allPhones\": [\"7702xxxxxx1\",\"7702xxxxxx2\"],\n   \"name\": \"clientName\",\n   \"email\": \"email@example.com\",\n   \"description\": \"Some description\"\n },\n \"application\": {\n   \"externalId\": 1234,\n   \"additionalDetails\": \"some details\",\n   \"details\": \"other details\",\n   \"price\": 0,\n   \"planDeliveryPeriod\": {\n     \"startDate\": 1492590418399,\n     \"endDate\": 1492590418399\n   },\n   \"addressFrom\":{\n     \"address\": \"Алматы, улица Карасай батыра, 95А\",\n     \"coords\": {\n       \"lat\": 43.25054092138005,\n       \"long\": 76.92709409497071\n     },\n     \"details\": \"Some details\"\n   },\n   \"addressTo\":{\n     \"address\": \"Алматы, улица Курмангазы, 72\",\n     \"coords\": {\n       \"lat\": 43.244015656536305,\n       \"long\": 76.94014035961915\n     },\n     \"details\": \"Some details 2\"\n   },\n   \"appType\": \"default\",\n   \"volume\": 14,\n   \"weight\": 20\n },\n \"goods\": [\n   {\n     \"name\": \"smth\",\n     \"code\": \"some code\",\n     \"volume\": 10,\n     \"quantity\": 10,\n     \"price\": 1000,\n     \"weight\": 1\n   },\n   {\n     \"name\": \"smth2\",\n     \"code\": \"some code2\",\n     \"volume\": 11,\n     \"quantity\": 11,\n     \"price\": 1001,\n     \"weight\": 1\n   }\n ]\n}'",
+        "type": "json"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status",
+            "description": "<p>Статус ответа.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>Уникальный id заявки.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Ответ (Пример):",
+          "content": "HTTP/1.1 200 Success\n{\n \"status\": \"success\",\n \"_id\": \"xxxxxxxxxxx\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "server/endpoints/applications.js",
+    "groupTitle": "Applications"
+  },
+  {
+    "type": "post",
+    "url": "/applications",
+    "title": "Создание / Изменение нескольких заявок",
+    "name": "InsertMultipleApplications",
+    "group": "Applications",
+    "version": "0.1.0",
+    "description": "<p>POST запрос на создание нескольких заявок. Для этого вам нужны как минимум api ключ, клиент и сами заявки.</p>",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "allowedValues": [
+              "application/json",
+              "application/xml"
+            ],
+            "optional": true,
+            "field": "x-response-type",
+            "description": "<p>Формат вывода ответа (по умолчанию: application/json).</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Тело запроса, основные данные": [
+          {
+            "group": "Тело запроса, основные данные",
+            "type": "String",
+            "optional": false,
+            "field": "api_key",
+            "description": "<p>Уникальный api ключ.</p>"
+          },
+          {
+            "group": "Тело запроса, основные данные",
+            "type": "Object[]",
+            "optional": false,
+            "field": "data",
+            "description": "<p>Список заявок к созданию</p>"
+          },
+          {
+            "group": "Тело запроса, основные данные",
+            "type": "Object",
+            "optional": false,
+            "field": "options",
+            "description": "<p>Дополнительные параметры, по значениям которых будет выполняться создание нескольких заявок</p>"
+          }
+        ],
+        "Описание объекта в списке data": [
+          {
+            "group": "Описание объекта в списке data",
+            "type": "Object",
+            "optional": false,
+            "field": "client",
+            "description": "<p>Информация о клиенте. Здесь содержится вся необходимая информация о клиете.</p>"
+          },
+          {
+            "group": "Описание объекта в списке data",
+            "type": "Object",
+            "optional": false,
+            "field": "application",
+            "description": "<p>Информация о заявке. Здесь содержится вся необходимая информация о заявке.</p>"
+          },
+          {
+            "group": "Описание объекта в списке data",
+            "type": "Object[]",
+            "optional": true,
+            "field": "goods",
+            "description": "<p>Информация о товарах. Здесь будут товары относящиеся к заявке.</p>"
+          },
+          {
+            "group": "Описание объекта в списке data",
+            "type": "Object",
+            "optional": true,
+            "field": "options",
+            "description": "<p>Дополнительная информация о заявке.</p>"
+          }
+        ],
+        "Параметры клиента (client)": [
+          {
+            "group": "Параметры клиента (client)",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>Имя клиента.</p>"
+          },
+          {
+            "group": "Параметры клиента (client)",
+            "type": "String",
+            "optional": true,
+            "field": "phone",
+            "description": "<p>Телефон клиента ( В международном формате).</p>"
+          },
+          {
+            "group": "Параметры клиента (client)",
+            "type": "Array",
+            "optional": true,
+            "field": "allPhones",
+            "description": "<p>Дополнительные телефоны клиента ( В международном формате).</p>"
+          },
+          {
+            "group": "Параметры клиента (client)",
+            "type": "String",
+            "optional": true,
+            "field": "email",
+            "description": "<p>Email клиента.</p>"
+          },
+          {
+            "group": "Параметры клиента (client)",
+            "type": "String",
+            "optional": true,
+            "field": "description",
+            "description": "<p>Описание клиента.</p>"
+          }
+        ],
+        "Параметры заявки (application)": [
+          {
+            "group": "Параметры заявки (application)",
+            "type": "String",
+            "optional": true,
+            "field": "additionalDetails",
+            "description": "<p>Детали заказа.</p>"
+          },
+          {
+            "group": "Параметры заявки (application)",
+            "type": "String",
+            "optional": true,
+            "field": "details",
+            "description": "<p>Сведения заказа.</p>"
+          },
+          {
+            "group": "Параметры заявки (application)",
+            "type": "String",
+            "optional": true,
+            "field": "externalId",
+            "description": "<p>Уникальный внешний id заявки (при указании externalId, попробует обновить существующую заявку, указанными полями).</p>"
+          },
+          {
+            "group": "Параметры заявки (application)",
+            "type": "Number",
+            "optional": true,
+            "field": "price",
+            "description": "<p>Цена заказа (считается отдельно от цены за товары).</p>"
+          },
+          {
+            "group": "Параметры заявки (application)",
+            "type": "String",
+            "optional": true,
+            "field": "priceType",
+            "description": "<p>Уникальный id типа оплаты (по дефолту берется основной тип).</p>"
+          },
+          {
+            "group": "Параметры заявки (application)",
+            "type": "Object",
+            "optional": false,
+            "field": "planDeliveryPeriod",
+            "description": "<p>Период времени когда нужно доставить.</p>"
+          },
+          {
+            "group": "Параметры заявки (application)",
+            "type": "Object",
+            "optional": false,
+            "field": "addressFrom",
+            "description": "<p>Адрес отправления, адрес откуда нужно взять заказ (При указании appType != default, можно указать null).</p>"
+          },
+          {
+            "group": "Параметры заявки (application)",
+            "type": "Object",
+            "optional": false,
+            "field": "addressTo",
+            "description": "<p>Адрес доставки, адрес куда нужно доставить заказ.</p>"
+          },
+          {
+            "group": "Параметры заявки (application)",
+            "type": "String",
+            "allowedValues": [
+              "pickUp",
+              "delivery",
+              "default"
+            ],
+            "optional": false,
+            "field": "appType",
+            "description": "<p>Тип заказа, какой тип будет у заказа: &quot;pickUp&quot; - Забор, &quot;delivery&quot; - доставка, &quot;default&quot; - Забор и Доставка.</p>"
+          },
+          {
+            "group": "Параметры заявки (application)",
+            "type": "Number",
+            "optional": true,
+            "field": "volume",
+            "description": "<p>Объем заказа (кг).</p>"
+          },
+          {
+            "group": "Параметры заявки (application)",
+            "type": "Number",
+            "optional": true,
+            "field": "weight",
+            "description": "<p>Вес заказа (м.куб).</p>"
+          },
+          {
+            "group": "Параметры заявки (application)",
+            "type": "String",
+            "optional": true,
+            "field": "requireTransportSkill",
+            "description": "<p>Категория заказа.</p>"
+          },
+          {
+            "group": "Параметры заявки (application)",
+            "type": "Number",
+            "optional": true,
+            "field": "waitTime",
+            "description": "<p>Время отгрузки (в минутах).</p>"
+          },
+          {
+            "group": "Параметры заявки (application)",
+            "type": "Number",
+            "optional": true,
+            "field": "loadTime",
+            "description": "<p>Время загрузки (в минутах).</p>"
+          },
+          {
+            "group": "Параметры заявки (application)",
+            "type": "Number",
+            "optional": true,
+            "field": "deliveryPrice",
+            "description": "<p>Цена за доставку (если вам нужно указать свою цену за доставку).</p>"
+          },
+          {
+            "group": "Параметры заявки (application)",
+            "type": "Object",
+            "optional": true,
+            "field": "sender",
+            "description": "<p>Отправитель (если у вас включен &quot;отправитель&quot;, то он обязателен).</p>"
+          },
+          {
+            "group": "Параметры заявки (application)",
+            "type": "String",
+            "optional": true,
+            "field": "_id",
+            "description": "<p>Уникальный id заявки (при указании id, обновит существующую заявку, указанными полями).</p>"
+          },
+          {
+            "group": "Параметры заявки (application)",
+            "type": "String",
+            "optional": true,
+            "field": "customId",
+            "description": "<p>Внешний номер заявки.</p>"
+          },
+          {
+            "group": "Параметры заявки (application)",
+            "type": "String",
+            "allowedValues": [
+              "new"
+            ],
+            "optional": true,
+            "field": "status",
+            "description": "<p>Меняет статус заявки из активного в новый.</p>"
+          }
+        ],
+        "Параметры времени доставки (planDeliveryPeriod)": [
+          {
+            "group": "Параметры времени доставки (planDeliveryPeriod)",
+            "type": "Number",
+            "optional": false,
+            "field": "startDate",
+            "description": "<p>Начальное время доставки, в миллисекундах (POSIX time).</p>"
+          },
+          {
+            "group": "Параметры времени доставки (planDeliveryPeriod)",
+            "type": "Number",
+            "optional": false,
+            "field": "endDate",
+            "description": "<p>Конечное время доставки, в миллисекундах (POSIX time).</p>"
+          }
+        ],
+        "Параметры адреса отправления (addressFrom)": [
+          {
+            "group": "Параметры адреса отправления (addressFrom)",
+            "type": "String",
+            "optional": false,
+            "field": "address",
+            "description": "<p>Адрес: (Город, улица, дом).</p>"
+          },
+          {
+            "group": "Параметры адреса отправления (addressFrom)",
+            "type": "Object",
+            "optional": true,
+            "field": "coords",
+            "description": "<p>Координаты адреса.</p>"
+          },
+          {
+            "group": "Параметры адреса отправления (addressFrom)",
+            "type": "String",
+            "optional": true,
+            "field": "details",
+            "description": "<p>Детали адреса.</p>"
+          }
+        ],
+        "Параметры адреса доставки (addressTo)": [
+          {
+            "group": "Параметры адреса доставки (addressTo)",
+            "type": "String",
+            "optional": false,
+            "field": "address",
+            "description": "<p>Адрес клиента: (Город, улица, дом).</p>"
+          },
+          {
+            "group": "Параметры адреса доставки (addressTo)",
+            "type": "Object",
+            "optional": true,
+            "field": "coords",
+            "description": "<p>Координаты адреса.</p>"
+          },
+          {
+            "group": "Параметры адреса доставки (addressTo)",
+            "type": "String",
+            "optional": true,
+            "field": "details",
+            "description": "<p>Детали адреса.</p>"
+          }
+        ],
+        "Параметры координат (coords)": [
+          {
+            "group": "Параметры координат (coords)",
+            "type": "Number",
+            "optional": false,
+            "field": "lat",
+            "description": "<p>Широта адреса.</p>"
+          },
+          {
+            "group": "Параметры координат (coords)",
+            "type": "Number",
+            "optional": false,
+            "field": "long",
+            "description": "<p>Долгота адреса.</p>"
+          }
+        ],
+        "Параметры Товара (goods)": [
+          {
+            "group": "Параметры Товара (goods)",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>Название товара.</p>"
+          },
+          {
+            "group": "Параметры Товара (goods)",
+            "type": "String",
+            "optional": false,
+            "field": "code",
+            "description": "<p>Код товара.</p>"
+          },
+          {
+            "group": "Параметры Товара (goods)",
+            "type": "Number",
+            "optional": false,
+            "field": "weight",
+            "description": "<p>Вес за 1 товар (кг).</p>"
+          },
+          {
+            "group": "Параметры Товара (goods)",
+            "type": "Number",
+            "optional": false,
+            "field": "volume",
+            "description": "<p>Объем за 1 товар (м.куб).</p>"
+          },
+          {
+            "group": "Параметры Товара (goods)",
+            "type": "Number",
+            "optional": false,
+            "field": "quantity",
+            "description": "<p>Количество товара.</p>"
+          },
+          {
+            "group": "Параметры Товара (goods)",
+            "type": "Number",
+            "optional": false,
+            "field": "price",
+            "description": "<p>Цена за 1 товар.</p>"
+          },
+          {
+            "group": "Параметры Товара (goods)",
+            "type": "Number",
+            "optional": false,
+            "field": "caseCoefficient",
+            "description": "<p>Коэффициент кейса за 1 товар.</p>"
+          }
+        ],
+        "Параметры Отправителя (sender)": [
+          {
+            "group": "Параметры Отправителя (sender)",
+            "type": "String",
+            "optional": true,
+            "field": "fullName",
+            "description": "<p>Имя отправителя.</p>"
+          },
+          {
+            "group": "Параметры Отправителя (sender)",
+            "type": "String",
+            "optional": true,
+            "field": "phone",
+            "description": "<p>Телефон отправителя.</p>"
+          }
+        ],
+        "Параметры Настроек (options)": [
+          {
+            "group": "Параметры Настроек (options)",
+            "type": "String",
+            "allowedValues": [
+              "replace",
+              "add",
+              "nothing"
+            ],
+            "optional": false,
+            "field": "changeGoods",
+            "description": "<p>При обновлении заявки, действие происходимое с товарами (replace - заменяет товары указанными в запросе, add - добавляет товары к существующим товарам, nothing - ничего не делает с существующими товарами заявки).</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "Запрос (Пример):",
+        "content": "curl -X POST \\\nhttps://app.relog.kz/api/v2/applications \\\n-H 'content-type: application/json' \\\n-d '{\n \"api_key\": \"xxxxxxxxxxxxxx\",\n \"options\": {\n   \"multi\": true\n },\n \"data\": [{\n   \"client\": {\n     \"phone\": \"7702xxxxxxx\",\n     \"allPhones\": [\"7702xxxxxx1\",\"7702xxxxxx2\"],\n     \"name\": \"clientName\",\n     \"email\": \"email@example.com\",\n     \"description\": \"Some description\"\n   },\n   \"application\": {\n     \"externalId\": 1234,\n     \"additionalDetails\": \"some details\",\n     \"details\": \"other details\",\n     \"price\": 0,\n     \"planDeliveryPeriod\": {\n       \"startDate\": 1492590418399,\n       \"endDate\": 1492590418399\n     },\n     \"addressFrom\":{\n       \"address\": \"Алматы, улица Карасай батыра, 95А\",\n       \"coords\": {\n         \"lat\": 43.25054092138005,\n         \"long\": 76.92709409497071\n       },\n       \"details\": \"Some details\"\n     },\n     \"addressTo\":{\n       \"address\": \"Алматы, улица Курмангазы, 72\",\n       \"coords\": {\n         \"lat\": 43.244015656536305,\n         \"long\": 76.94014035961915\n       },\n       \"details\": \"Some details 2\"\n     },\n     \"appType\": \"default\",\n     \"volume\": 14,\n     \"weight\": 20\n   },\n   \"goods\": [\n     {\n       \"name\": \"smth\",\n       \"code\": \"some code\",\n       \"volume\": 10,\n       \"quantity\": 10,\n       \"price\": 1000,\n       \"weight\": 1\n     },\n     {\n       \"name\": \"smth2\",\n       \"code\": \"some code2\",\n       \"volume\": 11,\n       \"quantity\": 11,\n       \"price\": 1001,\n       \"weight\": 1\n     }\n   ]\n }]\n}'",
+        "type": "json"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status",
+            "description": "<p>Статус ответа.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>Уникальный id заявки.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Ответ (Пример):",
+          "content": "HTTP/1.1 200 Success\n{\n \"status\": \"success\",\n \"_id\": \"xxxxxxxxxxx\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "server/endpoints/applications.js",
+    "groupTitle": "Applications"
+  },
+  {
+    "type": "get",
+    "url": "/applications",
+    "title": "Список заявок",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "allowedValues": [
+              "application/json",
+              "application/xml"
+            ],
+            "optional": true,
+            "field": "x-response-type",
+            "description": "<p>Формат вывода ответа (по умолчанию: application/json).</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Передаваемые параметры": [
+          {
+            "group": "Передаваемые параметры",
+            "type": "String",
+            "optional": false,
+            "field": "api_key",
+            "description": "<p>Уникальный api ключ.</p>"
+          },
+          {
+            "group": "Передаваемые параметры",
+            "type": "String",
+            "optional": true,
+            "field": "_id",
+            "description": "<p>Уникальный id заявки.</p>"
+          },
+          {
+            "group": "Передаваемые параметры",
+            "type": "String",
+            "optional": true,
+            "field": "statusGroup",
+            "description": "<p>Фильтр по статусам (new, inprocess, finished).</p>"
+          },
+          {
+            "group": "Передаваемые параметры",
+            "type": "Long",
+            "optional": true,
+            "field": "createdAtStart",
+            "description": "<p>Фильтр по дате создания (Начало отправленной даты, в миллисекундах).</p>"
+          },
+          {
+            "group": "Передаваемые параметры",
+            "type": "Long",
+            "optional": true,
+            "field": "createdAtEnd",
+            "description": "<p>Фильтр по дате создания (Конец отправленной даты, в миллисекундах).</p>"
+          },
+          {
+            "group": "Передаваемые параметры",
+            "type": "Long",
+            "optional": true,
+            "field": "updatedAtStart",
+            "description": "<p>Фильтр по дате обновления (Начало отправленной даты, в миллисекундах).</p>"
+          },
+          {
+            "group": "Передаваемые параметры",
+            "type": "Long",
+            "optional": true,
+            "field": "updatedAtEnd",
+            "description": "<p>Фильтр по дате обновления (Конец отправленной даты, в миллисекундах).</p>"
+          },
+          {
+            "group": "Передаваемые параметры",
+            "type": "Long",
+            "optional": true,
+            "field": "factDeliveryDateStart",
+            "description": "<p>Фильтр по дате завершения (Начало отправленной даты, в миллисекундах).</p>"
+          },
+          {
+            "group": "Передаваемые параметры",
+            "type": "Long",
+            "optional": true,
+            "field": "factDeliveryDateEnd",
+            "description": "<p>Фильтр по дате завершения (Конец отправленной даты, в миллисекундах).</p>"
+          },
+          {
+            "group": "Передаваемые параметры",
+            "type": "Bool",
+            "optional": true,
+            "field": "includeGoods",
+            "description": "<p>Добавить в ответ данные о товарах.</p>"
+          },
+          {
+            "group": "Передаваемые параметры",
+            "type": "Bool",
+            "optional": true,
+            "field": "includeImages",
+            "description": "<p>Добавить в ответ ссылки на медию.</p>"
+          },
+          {
+            "group": "Передаваемые параметры",
+            "type": "Bool",
+            "optional": true,
+            "field": "includeRoute",
+            "description": "<p>Добавить в ответ данные по маршруту.</p>"
+          },
+          {
+            "group": "Передаваемые параметры",
+            "type": "Bool",
+            "optional": true,
+            "field": "includeHistory",
+            "description": "<p>Добавить в ответ историб по заявке.</p>"
+          },
+          {
+            "group": "Передаваемые параметры",
+            "type": "Int",
+            "optional": true,
+            "field": "limit",
+            "description": "<p>Лимит количества заявок (по умолчанию 25).</p>"
+          },
+          {
+            "group": "Передаваемые параметры",
+            "type": "Int",
+            "optional": true,
+            "field": "skip",
+            "description": "<p>Сколько заявок нужно пропустить из выборки (Необходим для пэйджинга).</p>"
+          },
+          {
+            "group": "Передаваемые параметры",
+            "type": "Int",
+            "optional": true,
+            "field": "customId",
+            "description": "<p>Какой номер заявки нужно показать.</p>"
+          },
+          {
+            "group": "Передаваемые параметры",
+            "type": "String",
+            "optional": true,
+            "field": "sortBy",
+            "description": "<p>Сортировка по ключу.</p>"
+          },
+          {
+            "group": "Передаваемые параметры",
+            "type": "String",
+            "allowedValues": [
+              "asc",
+              "desc"
+            ],
+            "optional": true,
+            "field": "order",
+            "description": "<p>Сортировка по возрастанию и убыванию.</p>"
+          },
+          {
+            "group": "Передаваемые параметры",
+            "type": "String",
+            "optional": true,
+            "field": "externalId",
+            "description": "<p>Уникальный ключ внешней системы.</p>"
+          },
+          {
+            "group": "Передаваемые параметры",
+            "type": "String",
+            "optional": true,
+            "field": "courierId",
+            "description": "<p>Уникальный ключ водителя.</p>"
+          },
+          {
+            "group": "Передаваемые параметры",
+            "type": "Long",
+            "optional": true,
+            "field": "planDeliveryDateStart",
+            "description": "<p>Фильтр по дате планирования (Дата доставки с, в миллисекундах).</p>"
+          },
+          {
+            "group": "Передаваемые параметры",
+            "type": "Long",
+            "optional": true,
+            "field": "planDeliveryDateEnd",
+            "description": "<p>Фильтр по дате планирования (Дата доставки по, в миллисекундах).</p>"
+          }
+        ],
+        "Получаемые данные заявки (applications)": [
+          {
+            "group": "Получаемые данные заявки (applications)",
+            "type": "String",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>Уникальный ключ заказа.</p>"
+          },
+          {
+            "group": "Получаемые данные заявки (applications)",
+            "type": "String",
+            "optional": false,
+            "field": "additionalDetails",
+            "description": "<p>Дополнительная информация.</p>"
+          },
+          {
+            "group": "Получаемые данные заявки (applications)",
+            "type": "String",
+            "optional": false,
+            "field": "details",
+            "description": "<p>Другая информация.</p>"
+          },
+          {
+            "group": "Получаемые данные заявки (applications)",
+            "type": "Object",
+            "optional": false,
+            "field": "addressFrom",
+            "description": "<p>Информация адреса погрузки откуда нужно взять заказ (равен null, если appType != default).</p>"
+          },
+          {
+            "group": "Получаемые данные заявки (applications)",
+            "type": "Object",
+            "optional": false,
+            "field": "AddressTo",
+            "description": "<p>Информация адреса загрузки куда нужно отвезти заказ.</p>"
+          },
+          {
+            "group": "Получаемые данные заявки (applications)",
+            "type": "String",
+            "allowedValues": [
+              "pickUp",
+              "delivery",
+              "default"
+            ],
+            "optional": false,
+            "field": "appType",
+            "description": "<p>Тип заявки.</p>"
+          },
+          {
+            "group": "Получаемые данные заявки (applications)",
+            "type": "Object",
+            "optional": false,
+            "field": "client",
+            "description": "<p>Информация клиента.</p>"
+          },
+          {
+            "group": "Получаемые данные заявки (applications)",
+            "type": "Number",
+            "optional": false,
+            "field": "commentsCount",
+            "description": "<p>Количество комментариев.</p>"
+          },
+          {
+            "group": "Получаемые данные заявки (applications)",
+            "type": "String",
+            "optional": false,
+            "field": "companyId",
+            "description": "<p>Уникальный ключ компании.</p>"
+          },
+          {
+            "group": "Получаемые данные заявки (applications)",
+            "type": "Object",
+            "optional": false,
+            "field": "courier",
+            "description": "<p>Информация водителя  (может быть null).</p>"
+          },
+          {
+            "group": "Получаемые данные заявки (applications)",
+            "type": "String",
+            "optional": false,
+            "field": "createdUserId",
+            "description": "<p>Уникальный ключ пользователя создавшего заказ.</p>"
+          },
+          {
+            "group": "Получаемые данные заявки (applications)",
+            "type": "String",
+            "optional": false,
+            "field": "createdUserName",
+            "description": "<p>Имя пользователя создавшего заказ.</p>"
+          },
+          {
+            "group": "Получаемые данные заявки (applications)",
+            "type": "String",
+            "optional": false,
+            "field": "createdUserPhone",
+            "description": "<p>Телефон пользователя создавшего заказ.</p>"
+          },
+          {
+            "group": "Получаемые данные заявки (applications)",
+            "type": "Number",
+            "optional": false,
+            "field": "customId",
+            "description": "<p>Уникальный номер заявки.</p>"
+          },
+          {
+            "group": "Получаемые данные заявки (applications)",
+            "type": "Number",
+            "optional": false,
+            "field": "deliveryPrice",
+            "description": "<p>Цена доставки.</p>"
+          },
+          {
+            "group": "Получаемые данные заявки (applications)",
+            "type": "String",
+            "optional": false,
+            "field": "externalId",
+            "description": "<p>Уникальная информация с чужой системы.</p>"
+          },
+          {
+            "group": "Получаемые данные заявки (applications)",
+            "type": "Date",
+            "optional": false,
+            "field": "factDeliveryDate",
+            "description": "<p>Дата завершения заказа (null если не завершен).</p>"
+          },
+          {
+            "group": "Получаемые данные заявки (applications)",
+            "type": "Date",
+            "optional": false,
+            "field": "courierWentDate",
+            "description": "<p>Статус: &quot;Курьер выехал&quot;. Дата выезда водителя (null если выезда не было) .</p>"
+          },
+          {
+            "group": "Получаемые данные заявки (applications)",
+            "type": "Number",
+            "optional": false,
+            "field": "generalPrice",
+            "description": "<p>Общая цена.</p>"
+          },
+          {
+            "group": "Получаемые данные заявки (applications)",
+            "type": "Number",
+            "optional": false,
+            "field": "goodsCount",
+            "description": "<p>Количество товаров.</p>"
+          },
+          {
+            "group": "Получаемые данные заявки (applications)",
+            "type": "Number",
+            "optional": false,
+            "field": "goodsPrice",
+            "description": "<p>Цена товаров.</p>"
+          },
+          {
+            "group": "Получаемые данные заявки (applications)",
+            "type": "Number",
+            "optional": false,
+            "field": "imagesCount",
+            "description": "<p>Количество фотографий.</p>"
+          },
+          {
+            "group": "Получаемые данные заявки (applications)",
+            "type": "Number",
+            "optional": false,
+            "field": "index",
+            "description": "<p>Последовательность заказа у водителя .</p>"
+          },
+          {
+            "group": "Получаемые данные заявки (applications)",
+            "type": "Number",
+            "optional": false,
+            "field": "loadTime",
+            "description": "<p>Время загрузки (мин).</p>"
+          },
+          {
+            "group": "Получаемые данные заявки (applications)",
+            "type": "Object",
+            "optional": false,
+            "field": "planDeliveryPeriod",
+            "description": "<p>Начало и Конец даты доставки.</p>"
+          },
+          {
+            "group": "Получаемые данные заявки (applications)",
+            "type": "String",
+            "optional": false,
+            "field": "priceType",
+            "description": "<p>Уникальный ключ типа оплаты.</p>"
+          },
+          {
+            "group": "Получаемые данные заявки (applications)",
+            "type": "String",
+            "optional": false,
+            "field": "requireTransportSkill",
+            "description": "<p>Категория заказа.</p>"
+          },
+          {
+            "group": "Получаемые данные заявки (applications)",
+            "type": "String",
+            "optional": false,
+            "field": "routeId",
+            "description": "<p>Уникальный ключ маршрута (может быть null).</p>"
+          },
+          {
+            "group": "Получаемые данные заявки (applications)",
+            "type": "String",
+            "optional": false,
+            "field": "searchField",
+            "description": "<p>Информация по которой ищем заказ.</p>"
+          },
+          {
+            "group": "Получаемые данные заявки (applications)",
+            "type": "Object",
+            "optional": false,
+            "field": "sender",
+            "description": "<p>Информация отправителя.</p>"
+          },
+          {
+            "group": "Получаемые данные заявки (applications)",
+            "type": "Number",
+            "optional": false,
+            "field": "servicesPrice",
+            "description": "<p>Цена за услуги.</p>"
+          },
+          {
+            "group": "Получаемые данные заявки (applications)",
+            "type": "String",
+            "optional": false,
+            "field": "status",
+            "description": "<p>Уникальный ключ статуса заявки.</p>"
+          },
+          {
+            "group": "Получаемые данные заявки (applications)",
+            "type": "String",
+            "allowedValues": [
+              "new",
+              "inprocess",
+              "finished"
+            ],
+            "optional": false,
+            "field": "statusGroup",
+            "description": "<p>Группа в которую входит на данный момент заявка.</p>"
+          },
+          {
+            "group": "Получаемые данные заявки (applications)",
+            "type": "Object",
+            "optional": false,
+            "field": "timestamps",
+            "description": "<p>Даты создания и изменения заказа.</p>"
+          },
+          {
+            "group": "Получаемые данные заявки (applications)",
+            "type": "Number",
+            "optional": false,
+            "field": "volume",
+            "description": "<p>Объем заказа.</p>"
+          },
+          {
+            "group": "Получаемые данные заявки (applications)",
+            "type": "Number",
+            "optional": false,
+            "field": "waitTime",
+            "description": "<p>Время отгрузки (мин).</p>"
+          },
+          {
+            "group": "Получаемые данные заявки (applications)",
+            "type": "Date",
+            "optional": false,
+            "field": "waitingEnded",
+            "description": "<p>Дата конца ожидания водителя .</p>"
+          },
+          {
+            "group": "Получаемые данные заявки (applications)",
+            "type": "Date",
+            "optional": false,
+            "field": "waitingStarted",
+            "description": "<p>Статус: &quot;Ожидаю&quot;. Дата начала ожидания водителя .</p>"
+          },
+          {
+            "group": "Получаемые данные заявки (applications)",
+            "type": "Number",
+            "optional": false,
+            "field": "weight",
+            "description": "<p>Вес заказа.</p>"
+          }
+        ],
+        "Получаемые данные заявки  (application)": [
+          {
+            "group": "Получаемые данные заявки  (application)",
+            "type": "Array",
+            "optional": false,
+            "field": "allDetails",
+            "description": "<p>Дополнительные поля заявки.</p>"
+          }
+        ],
+        "Получаемые данные заявки (client)": [
+          {
+            "group": "Получаемые данные заявки (client)",
+            "type": "String",
+            "optional": false,
+            "field": "description",
+            "description": "<p>Доп. Информация клиента.</p>"
+          },
+          {
+            "group": "Получаемые данные заявки (client)",
+            "type": "String",
+            "optional": false,
+            "field": "email",
+            "description": "<p>Email клиента.</p>"
+          },
+          {
+            "group": "Получаемые данные заявки (client)",
+            "type": "Bool",
+            "optional": false,
+            "field": "isSendEmail",
+            "description": "<p>Включена ли отправка email.</p>"
+          },
+          {
+            "group": "Получаемые данные заявки (client)",
+            "type": "Bool",
+            "optional": false,
+            "field": "isSendSMS",
+            "description": "<p>Включена ли отправка sms.</p>"
+          },
+          {
+            "group": "Получаемые данные заявки (client)",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>Имя клиента.</p>"
+          },
+          {
+            "group": "Получаемые данные заявки (client)",
+            "type": "String",
+            "optional": false,
+            "field": "phone",
+            "description": "<p>Телефон клиента.</p>"
+          },
+          {
+            "group": "Получаемые данные заявки (client)",
+            "type": "String",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>Уникальный ключ клиента.</p>"
+          }
+        ],
+        "Получаемые данные заявки (courier)": [
+          {
+            "group": "Получаемые данные заявки (courier)",
+            "type": "String",
+            "optional": false,
+            "field": "customId",
+            "description": "<p>Порядковый номер водителя .</p>"
+          },
+          {
+            "group": "Получаемые данные заявки (courier)",
+            "type": "String",
+            "optional": false,
+            "field": "email",
+            "description": "<p>Email водителя .</p>"
+          },
+          {
+            "group": "Получаемые данные заявки (courier)",
+            "type": "String",
+            "optional": false,
+            "field": "fullName",
+            "description": "<p>Имя водителя .</p>"
+          },
+          {
+            "group": "Получаемые данные заявки (courier)",
+            "type": "String",
+            "optional": false,
+            "field": "userId",
+            "description": "<p>Уникальный ключ юзера водителя .</p>"
+          },
+          {
+            "group": "Получаемые данные заявки (courier)",
+            "type": "String",
+            "optional": false,
+            "field": "phone",
+            "description": "<p>Телефон водителя .</p>"
+          },
+          {
+            "group": "Получаемые данные заявки (courier)",
+            "type": "String",
+            "optional": false,
+            "field": "transportId",
+            "description": "<p>Уникальный ключ транспорта (может быть null).</p>"
+          },
+          {
+            "group": "Получаемые данные заявки (courier)",
+            "type": "String",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>Уникальный ключ водителя .</p>"
+          }
+        ],
+        "Получаемые данные заявки (planDeliveryPeriod)": [
+          {
+            "group": "Получаемые данные заявки (planDeliveryPeriod)",
+            "type": "Date",
+            "optional": false,
+            "field": "startDate",
+            "description": "<p>Начало даты доставки.</p>"
+          },
+          {
+            "group": "Получаемые данные заявки (planDeliveryPeriod)",
+            "type": "Date",
+            "optional": false,
+            "field": "endDate",
+            "description": "<p>Конец даты доставки.</p>"
+          }
+        ],
+        "Получаемые данные заявки (sender)": [
+          {
+            "group": "Получаемые данные заявки (sender)",
+            "type": "String",
+            "optional": false,
+            "field": "fullName",
+            "description": "<p>Имя отправителя.</p>"
+          },
+          {
+            "group": "Получаемые данные заявки (sender)",
+            "type": "String",
+            "optional": false,
+            "field": "phone",
+            "description": "<p>Телефон отправителя.</p>"
+          }
+        ],
+        "Получаемые данные заявки (timestamps)": [
+          {
+            "group": "Получаемые данные заявки (timestamps)",
+            "type": "Date",
+            "optional": false,
+            "field": "createdAt",
+            "description": "<p>Дата создания.</p>"
+          },
+          {
+            "group": "Получаемые данные заявки (timestamps)",
+            "type": "Date",
+            "optional": false,
+            "field": "phone",
+            "description": "<p>Дата последнего изменения.</p>"
+          }
+        ]
+      }
+    },
+    "name": "RetrieveApplications",
+    "group": "Applications",
+    "version": "0.1.0",
+    "description": "<p>GET запрос на получение заявок. Вы получите все данные относящиеся к заявке. Для получения заявки вам потребуется, api ключ(генерируется в системе).</p>",
+    "sampleRequest": [
+      {
+        "url": "https://app.relog.kz/api/v2/applications"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Пример (Запрос):",
+        "content": "curl -i https://app.relog.kz/api/v2/applications/?api_key=xxxxxx&statusGroup=finished&_id=xxqqweqe",
+        "type": "json"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status",
+            "description": "<p>Статус ответа.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "[Object]",
+            "optional": false,
+            "field": "applications",
+            "description": "<p>Массив заявок.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Ответ(Пример):",
+          "content": "HTTP/1.1 200 Success\n{\n \"status\": \"success\",\n \"applications\": [],\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "type": "String",
+            "optional": false,
+            "field": "status",
+            "description": "<p>Статус ответа.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Сообщение ошибки.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "type": "Number",
+            "optional": false,
+            "field": "error",
+            "description": "<p>Номер ошибки.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Ответ (Пример):",
+          "content": "HTTP/1.1 403 Forbidden\n{\n \"status\": \"error\",\n \"message\": \"no access\",\n \"error\": 403\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "server/endpoints/applications.js",
+    "groupTitle": "Applications"
+  },
+  {
+    "type": "get",
+    "url": "/clients",
+    "title": "Список клиентов",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "allowedValues": [
+              "application/json",
+              "application/xml"
+            ],
+            "optional": true,
+            "field": "x-response-type",
+            "description": "<p>Формат вывода ответа (по умолчанию: application/json).</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Передаваемые параметры": [
+          {
+            "group": "Передаваемые параметры",
+            "type": "String",
+            "optional": false,
+            "field": "api_key",
+            "description": "<p>Уникальный api ключ.</p>"
+          },
+          {
+            "group": "Передаваемые параметры",
+            "type": "String",
+            "optional": true,
+            "field": "phone",
+            "description": "<p>Фильтр по номеру телефона клиента.</p>"
+          },
+          {
+            "group": "Передаваемые параметры",
+            "type": "String",
+            "optional": true,
+            "field": "name",
+            "description": "<p>Фильтр по ФИО клиента.</p>"
+          },
+          {
+            "group": "Передаваемые параметры",
+            "type": "String",
+            "optional": true,
+            "field": "_id",
+            "description": "<p>Фильтр по id клиента.</p>"
+          },
+          {
+            "group": "Передаваемые параметры",
+            "type": "Int",
+            "optional": true,
+            "field": "limit",
+            "description": "<p>Лимит по количеству клиентов (по умолчанию 10).</p>"
+          }
+        ],
+        "Получаемые данные (client)": [
+          {
+            "group": "Получаемые данные (client)",
+            "type": "String",
+            "optional": false,
+            "field": "description",
+            "description": "<p>Доп. Информация клиента.</p>"
+          },
+          {
+            "group": "Получаемые данные (client)",
+            "type": "String",
+            "optional": false,
+            "field": "email",
+            "description": "<p>Email клиента.</p>"
+          },
+          {
+            "group": "Получаемые данные (client)",
+            "type": "Bool",
+            "optional": false,
+            "field": "isSendEmail",
+            "description": "<p>Включена ли отправка email.</p>"
+          },
+          {
+            "group": "Получаемые данные (client)",
+            "type": "Bool",
+            "optional": false,
+            "field": "isSendSMS",
+            "description": "<p>Включена ли отправка sms.</p>"
+          },
+          {
+            "group": "Получаемые данные (client)",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>Имя клиента.</p>"
+          },
+          {
+            "group": "Получаемые данные (client)",
+            "type": "String",
+            "optional": false,
+            "field": "phone",
+            "description": "<p>Телефон клиента.</p>"
+          },
+          {
+            "group": "Получаемые данные (client)",
+            "type": "String",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>Уникальный ключ клиента.</p>"
+          },
+          {
+            "group": "Получаемые данные (client)",
+            "type": "String",
+            "optional": false,
+            "field": "companyId",
+            "description": "<p>Уникальный ключ компании.</p>"
+          },
+          {
+            "group": "Получаемые данные (client)",
+            "type": "Array",
+            "optional": false,
+            "field": "addresses",
+            "description": "<p>Адреса клиента.</p>"
+          },
+          {
+            "group": "Получаемые данные (client)",
+            "type": "Date",
+            "optional": false,
+            "field": "createdAt",
+            "description": "<p>Дата создания клиента.</p>"
+          },
+          {
+            "group": "Получаемые данные (client)",
+            "type": "String",
+            "optional": false,
+            "field": "createdUserId",
+            "description": "<p>userId создавшего диспетчера.</p>"
+          },
+          {
+            "group": "Получаемые данные (client)",
+            "type": "String",
+            "optional": false,
+            "field": "searchField",
+            "description": "<p>Информация по которой ищем клиента.</p>"
+          }
+        ],
+        "Получаемые данные (addresses)": [
+          {
+            "group": "Получаемые данные (addresses)",
+            "type": "String",
+            "optional": false,
+            "field": "address",
+            "description": "<p>Адрес клиента.</p>"
+          },
+          {
+            "group": "Получаемые данные (addresses)",
+            "type": "String",
+            "optional": false,
+            "field": "details",
+            "description": "<p>Детали адреса.</p>"
+          },
+          {
+            "group": "Получаемые данные (addresses)",
+            "type": "Object",
+            "optional": false,
+            "field": "coords",
+            "description": "<p>Координаты адреса.</p>"
+          }
+        ]
+      }
+    },
+    "name": "RetrieveClients",
+    "group": "Clients",
+    "version": "0.1.0",
+    "description": "<p>GET запрос на получение клиентов. Вы получите все данные относящиеся к клиенту. Для выполнения запроса вам потребуется, api ключ(генерируется в системе).</p>",
+    "sampleRequest": [
+      {
+        "url": "https://app.relog.kz/api/v2/clients"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Пример (Запрос):",
+        "content": "curl -i https://app.relog.kz/api/v2/clients",
+        "type": "json"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status",
+            "description": "<p>Статус ответа.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "[Object]",
+            "optional": false,
+            "field": "clients",
+            "description": "<p>Массив клиентов.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Ответ(Пример):",
+          "content": "HTTP/1.1 200 Success\n{\n \"status\": \"success\",\n \"clients\": [],\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "type": "String",
+            "optional": false,
+            "field": "status",
+            "description": "<p>Статус ответа.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Сообщение ошибки.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "type": "Number",
+            "optional": false,
+            "field": "error",
+            "description": "<p>Номер ошибки.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Ответ (Пример):",
+          "content": "HTTP/1.1 403 Forbidden\n{\n \"status\": \"error\",\n \"message\": \"no access\",\n \"error\": 403\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "server/endpoints/clients.js",
+    "groupTitle": "Clients"
+  },
+  {
+    "type": "get",
+    "url": "/clients/addresses",
+    "title": "Список обновленных адресов клиентов",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "allowedValues": [
+              "application/json",
+              "application/xml"
+            ],
+            "optional": true,
+            "field": "x-response-type",
+            "description": "<p>Формат вывода ответа (по умолчанию: application/json).</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Передаваемые параметры": [
+          {
+            "group": "Передаваемые параметры",
+            "type": "String",
+            "optional": false,
+            "field": "api_key",
+            "description": "<p>Уникальный api ключ.</p>"
+          },
+          {
+            "group": "Передаваемые параметры",
+            "type": "String",
+            "allowedValues": [
+              "day",
+              "week",
+              "month",
+              "quarter",
+              "year"
+            ],
+            "optional": false,
+            "field": "during",
+            "description": "<p>За определенное время (за день/неделю/месяц/квартал/год)</p>"
+          }
+        ],
+        "Получаемые данные (client)": [
+          {
+            "group": "Получаемые данные (client)",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>Имя клиента.</p>"
+          },
+          {
+            "group": "Получаемые данные (client)",
+            "type": "String",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>Уникальный ключ клиента.</p>"
+          },
+          {
+            "group": "Получаемые данные (client)",
+            "type": "Array",
+            "optional": false,
+            "field": "addresses",
+            "description": "<p>Адреса клиента.</p>"
+          }
+        ],
+        "Получаемые данные (addresses)": [
+          {
+            "group": "Получаемые данные (addresses)",
+            "type": "String",
+            "optional": false,
+            "field": "address",
+            "description": "<p>Адрес клиента.</p>"
+          },
+          {
+            "group": "Получаемые данные (addresses)",
+            "type": "String",
+            "optional": false,
+            "field": "details",
+            "description": "<p>Детали адреса.</p>"
+          },
+          {
+            "group": "Получаемые данные (addresses)",
+            "type": "Object",
+            "optional": false,
+            "field": "coords",
+            "description": "<p>Координаты адреса.</p>"
+          },
+          {
+            "group": "Получаемые данные (addresses)",
+            "type": "Date",
+            "optional": false,
+            "field": "updated",
+            "description": "<p>Дата обновления адреса.</p>"
+          }
+        ],
+        "Параметры координат (coords)": [
+          {
+            "group": "Параметры координат (coords)",
+            "type": "Number",
+            "optional": false,
+            "field": "lat",
+            "description": "<p>Широта адреса.</p>"
+          },
+          {
+            "group": "Параметры координат (coords)",
+            "type": "Number",
+            "optional": false,
+            "field": "long",
+            "description": "<p>Долгота адреса.</p>"
+          }
+        ]
+      }
+    },
+    "name": "RetrieveUpdatedAddresses",
+    "group": "Clients",
+    "version": "0.1.0",
+    "description": "<p>GET запрос на получение обновленных адресов клиентов. Вы получите все обновленные адреса относящиеся к клиенту. Для выполнения запроса вам потребуется, api ключ(генерируется в системе).</p>",
+    "sampleRequest": [
+      {
+        "url": "https://app.relog.kz/api/v2/clients/addresses"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Пример (Запрос):",
+        "content": "curl -i https://app.relog.kz/api/v2/clients/addresses",
+        "type": "json"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status",
+            "description": "<p>Статус ответа.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "[Object]",
+            "optional": false,
+            "field": "clients",
+            "description": "<p>Массив клиентов.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Ответ(Пример):",
+          "content": "HTTP/1.1 200 Success\n{\n \"status\": \"success\",\n \"clients\": [],\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "type": "String",
+            "optional": false,
+            "field": "status",
+            "description": "<p>Статус ответа.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Сообщение ошибки.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "type": "Number",
+            "optional": false,
+            "field": "error",
+            "description": "<p>Номер ошибки.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Ответ (Пример):",
+          "content": "HTTP/1.1 403 Forbidden\n{\n \"status\": \"error\",\n \"message\": \"no access\",\n \"error\": 403\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "server/endpoints/clients.js",
+    "groupTitle": "Clients"
+  },
+  {
+    "type": "post",
+    "url": "/clients",
+    "title": "Создание/Изменение клиента",
+    "name": "insertClient",
+    "group": "Clients",
+    "version": "0.1.0",
+    "description": "<p>POST запрос на создание или изменение клиента. Для этого вам нужны как минимум api ключ и клиент.</p>",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "allowedValues": [
+              "application/json",
+              "application/xml"
+            ],
+            "optional": true,
+            "field": "x-response-type",
+            "description": "<p>Формат вывода ответа (по умолчанию: application/json).</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "api_key",
+            "description": "<p>Уникальный api ключ.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "client",
+            "description": "<p>Информация о клиенте. Здесь содержится вся необходимая информация о клиенте.</p>"
+          }
+        ],
+        "Параметры клиента (client)": [
+          {
+            "group": "Параметры клиента (client)",
+            "type": "String",
+            "optional": true,
+            "field": "phone",
+            "description": "<p>Телефон клиента (международный номер).</p>"
+          },
+          {
+            "group": "Параметры клиента (client)",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>ФИО клиента.</p>"
+          },
+          {
+            "group": "Параметры клиента (client)",
+            "type": "Array",
+            "optional": true,
+            "field": "allPhones",
+            "description": "<p>Дополнительные телефоны клиента ( В международном формате).</p>"
+          },
+          {
+            "group": "Параметры клиента (client)",
+            "type": "String",
+            "optional": true,
+            "field": "email",
+            "description": "<p>E-mail клиента.</p>"
+          },
+          {
+            "group": "Параметры клиента (client)",
+            "type": "String",
+            "optional": true,
+            "field": "description",
+            "description": "<p>Дополнительная информация клиента.</p>"
+          },
+          {
+            "group": "Параметры клиента (client)",
+            "type": "[Object]",
+            "optional": true,
+            "field": "addresses",
+            "description": "<p>Адреса клиента.</p>"
+          },
+          {
+            "group": "Параметры клиента (client)",
+            "type": "String",
+            "optional": true,
+            "field": "_id",
+            "description": "<p>Уникальный id клиента (При указании обновит существующего клиента).</p>"
+          }
+        ],
+        "Параметры адреса клиента (addresses)": [
+          {
+            "group": "Параметры адреса клиента (addresses)",
+            "type": "String",
+            "optional": false,
+            "field": "address",
+            "description": "<p>Адрес клиента (город, улица, дом).</p>"
+          },
+          {
+            "group": "Параметры адреса клиента (addresses)",
+            "type": "Object",
+            "optional": true,
+            "field": "coords",
+            "description": "<p>Координаты адреса (если их нет, убрать).</p>"
+          }
+        ],
+        "Параметры координат (coords)": [
+          {
+            "group": "Параметры координат (coords)",
+            "type": "Number",
+            "optional": false,
+            "field": "lat",
+            "description": "<p>Широта адреса.</p>"
+          },
+          {
+            "group": "Параметры координат (coords)",
+            "type": "Number",
+            "optional": false,
+            "field": "long",
+            "description": "<p>Долгота адреса.</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "Запрос(Пример):",
+        "content": "curl -X POST \\\nhttps://app.relog.kz/api/v2/clients/ \\\n-H 'content-type: application/json' \\\n-d '{\n \"api_key\": \"xxxxxxxxxxxxxxxx\",\n \"client\": {\n   \"phone\": \"77028448374\",\n   \"allPhones\": [\"77028433448\",\"77028433447\"],\n   \"name\": \"Vasya Pupkin\",\n   \"email\": 'example@example.com',\n   \"description\": \"some description\",\n   \"addresses\": [\n     {\n        \"address\": \"Алматы Байзакова 280\",\n         \"coords\": {\n           \"lat\": 43.236984,\n           \"long\": 76.915297\n         }\n     }\n   ]\n }\n}'",
+        "type": "json"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status",
+            "description": "<p>Статус ответа.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>Уникальный id клиента.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Ответ (Пример):",
+          "content": "HTTP/1.1 200 Success\n{\n \"status\": \"success\",\n \"_id\": \"xxxxxxxxxxx\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "server/endpoints/clients.js",
+    "groupTitle": "Clients"
+  },
+  {
+    "type": "post",
+    "url": "/couriers/storage",
+    "title": "Прикрепление водителя к складу",
+    "name": "CourierStorage",
+    "group": "Couriers",
+    "version": "0.1.0",
+    "description": "<p>POST запрос который прикрепляет водителя к складу. Для этого вам нужны api ключ, id водителя и название склада.</p>",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "allowedValues": [
+              "application/json",
+              "application/xml"
+            ],
+            "optional": true,
+            "field": "x-response-type",
+            "description": "<p>Формат вывода ответа (по умолчанию: application/json).</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "api_key",
+            "description": "<p>Уникальный api ключ.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "courierId",
+            "description": "<p>id идентификатор водителя.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "storageName",
+            "description": "<p>Название склада.</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "Запрос (Пример):",
+        "content": "curl -X POST \\\nhttps://app.relog.kz/api/v2/couriers/storage \\\n-H 'content-type: application/json' \\\n-d '{\n \"api_key\": \"xxxxxxxxxxxxxx\",\n \"storageName\": \"Название склада\",\n \"courierId\": \"xxxxxxxxxxxxxx\"\n}'",
+        "type": "json"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status",
+            "description": "<p>Статус ответа.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Сообщение .</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Ответ (Пример):",
+          "content": "HTTP/1.1 200 Success\n{\n \"status\": \"success\",\n \"message\": \"Courier was successfully attached to the storage\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "server/endpoints/couriers.js",
+    "groupTitle": "Couriers"
+  },
+  {
+    "type": "delete",
+    "url": "/couriers",
+    "title": "Удаление водителя",
+    "name": "DeleteCourier",
+    "group": "Couriers",
+    "version": "0.1.0",
+    "description": "<p>DELETE запрос на удаление одного водителя . Для этого вам нужны api ключ и id водителя.</p>",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "allowedValues": [
+              "application/json",
+              "application/xml"
+            ],
+            "optional": true,
+            "field": "x-response-type",
+            "description": "<p>Формат вывода ответа (по умолчанию: application/json).</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "api_key",
+            "description": "<p>Уникальный api ключ.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "data",
+            "description": "<p>Данные водителя.</p>"
+          }
+        ],
+        "Параметры заявки (data)": [
+          {
+            "group": "Параметры заявки (data)",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p>id Идентификатор, по которому будет происходить удаление водителя .</p>"
+          },
+          {
+            "group": "Параметры заявки (data)",
+            "type": "String",
+            "optional": false,
+            "field": "type",
+            "description": "<p>Тип идентификатора, systemId - внутренний идентификатор .</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "Запрос (Пример):",
+        "content": "curl -X DELETE \\\nhttps://app.relog.kz/api/v2/couriers \\\n-H 'content-type: application/json' \\\n-d '{\n \"api_key\": \"xxxxxxxxxxxxxx\",\n \"data\": {\n     \"id\": \"xxxxxxxxxxxx\",\n     \"type\": \"systemId\"\n  }\n}'",
+        "type": "json"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status",
+            "description": "<p>Статус ответа.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Сообщение .</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Ответ (Пример):",
+          "content": "HTTP/1.1 200 Success\n{\n \"status\": \"success\",\n \"message\": \"Courier was successfully removed\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "server/endpoints/couriers.js",
+    "groupTitle": "Couriers"
+  },
+  {
+    "type": "post",
+    "url": "/couriers",
+    "title": "Создание/Изменение водителя",
+    "name": "InsertCourier",
+    "group": "Couriers",
+    "version": "0.1.0",
+    "description": "<p>POST запрос на создание или изменение водителя . Для этого вам нужны как минимум api ключ и данные водителя .</p>",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "allowedValues": [
+              "application/json",
+              "application/xml"
+            ],
+            "optional": true,
+            "field": "x-response-type",
+            "description": "<p>Формат вывода ответа (по умолчанию: application/json).</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "api_key",
+            "description": "<p>Уникальный api ключ.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "courier",
+            "description": "<p>Информация о водителе. Здесь содержится вся необходимая информация о водителе.</p>"
+          }
+        ],
+        "Параметры заявки (courier)": [
+          {
+            "group": "Параметры заявки (courier)",
+            "type": "String",
+            "optional": false,
+            "field": "email",
+            "description": "<p>Email водителя .</p>"
+          },
+          {
+            "group": "Параметры заявки (courier)",
+            "type": "String",
+            "optional": false,
+            "field": "fullName",
+            "description": "<p>Имя водителя .</p>"
+          },
+          {
+            "group": "Параметры заявки (courier)",
+            "type": "String",
+            "optional": false,
+            "field": "phone",
+            "description": "<p>Телефон водителя .</p>"
+          },
+          {
+            "group": "Параметры заявки (courier)",
+            "type": "String",
+            "optional": false,
+            "field": "password",
+            "description": "<p>Пароль водителя .</p>"
+          },
+          {
+            "group": "Параметры заявки (courier)",
+            "type": "String",
+            "optional": true,
+            "field": "transportId",
+            "description": "<p>_id транспорта, к которому надо прикрепить.</p>"
+          },
+          {
+            "group": "Параметры заявки (courier)",
+            "type": "String",
+            "optional": true,
+            "field": "_id",
+            "description": "<p>Уникальный id водителя  (при указании id, обновит существующего водителя , указанными полями).</p>"
+          },
+          {
+            "group": "Параметры заявки (courier)",
+            "type": "String",
+            "optional": false,
+            "field": "additionalInfo",
+            "description": "<p>Дополнительная информация о водителе.</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "Запрос (Пример):",
+        "content": "curl -X POST \\\nhttps://app.relog.kz/api/v2/couriers \\\n-H 'content-type: courier/json' \\\n-d '{\n \"api_key\": \"xxxxxxxxxxxxxx\",\n \"courier\": {\n   \"phone\": \"7702xxxxxxx\",\n   \"fullName\": \"some Name\",\n   \"email\": \"email@example.com\",\n   \"password\": \"password_example\",\n   \"additionalInfo\": \"additional information\"\n }\n}'",
+        "type": "json"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status",
+            "description": "<p>Статус ответа.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>Уникальный id водителя .</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Ответ (Пример):",
+          "content": "HTTP/1.1 200 Success\n{\n \"status\": \"success\",\n \"_id\": \"xxxxxxxxxxx\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "server/endpoints/couriers.js",
+    "groupTitle": "Couriers"
+  },
+  {
+    "type": "get",
+    "url": "/couriers",
+    "title": "Список водителей",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "allowedValues": [
+              "application/json",
+              "application/xml"
+            ],
+            "optional": true,
+            "field": "x-response-type",
+            "description": "<p>Формат вывода ответа (по умолчанию: application/json).</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Передаваемые параметры": [
+          {
+            "group": "Передаваемые параметры",
+            "type": "String",
+            "optional": false,
+            "field": "api_key",
+            "description": "<p>Уникальный api ключ.</p>"
+          },
+          {
+            "group": "Передаваемые параметры",
+            "type": "Int",
+            "optional": true,
+            "field": "customId",
+            "description": "<p>Фильтр по уникальному номеру водителя .</p>"
+          },
+          {
+            "group": "Передаваемые параметры",
+            "type": "String",
+            "optional": true,
+            "field": "email",
+            "description": "<p>Фильтр по E-mail водителя .</p>"
+          },
+          {
+            "group": "Передаваемые параметры",
+            "type": "String",
+            "optional": true,
+            "field": "fullName",
+            "description": "<p>Фильтр по ФИО водителя .</p>"
+          },
+          {
+            "group": "Передаваемые параметры",
+            "type": "String",
+            "optional": true,
+            "field": "phone",
+            "description": "<p>Фильтр по номеру телефона водителя .</p>"
+          },
+          {
+            "group": "Передаваемые параметры",
+            "type": "String",
+            "optional": true,
+            "field": "_id",
+            "description": "<p>id водителя .</p>"
+          },
+          {
+            "group": "Передаваемые параметры",
+            "type": "Int",
+            "optional": true,
+            "field": "limit",
+            "description": "<p>Лимит по количеству водителей (по умолчанию 10).</p>"
+          }
+        ],
+        "Получаемые данные (courier)": [
+          {
+            "group": "Получаемые данные (courier)",
+            "type": "String",
+            "optional": false,
+            "field": "androidRegId",
+            "description": "<p>id телефона водителя  для push уведомлений (может быть null).</p>"
+          },
+          {
+            "group": "Получаемые данные (courier)",
+            "type": "String",
+            "optional": false,
+            "field": "appVersion",
+            "description": "<p>Версия приложения у водителя .</p>"
+          },
+          {
+            "group": "Получаемые данные (courier)",
+            "type": "Number",
+            "optional": false,
+            "field": "avgSpeed",
+            "description": "<p>Средняя скорость у водителя .</p>"
+          },
+          {
+            "group": "Получаемые данные (courier)",
+            "type": "Object",
+            "optional": false,
+            "field": "cashBox",
+            "description": "<p>Касса водителя .</p>"
+          },
+          {
+            "group": "Получаемые данные (courier)",
+            "type": "String",
+            "optional": false,
+            "field": "companyId",
+            "description": "<p>Уникальный ключ компании.</p>"
+          },
+          {
+            "group": "Получаемые данные (courier)",
+            "type": "String",
+            "optional": false,
+            "field": "customId",
+            "description": "<p>Порядковый номер водителя .</p>"
+          },
+          {
+            "group": "Получаемые данные (courier)",
+            "type": "String",
+            "optional": false,
+            "field": "email",
+            "description": "<p>Email водителя .</p>"
+          },
+          {
+            "group": "Получаемые данные (courier)",
+            "type": "String",
+            "optional": false,
+            "field": "fullName",
+            "description": "<p>Имя водителя .</p>"
+          },
+          {
+            "group": "Получаемые данные (courier)",
+            "type": "String",
+            "optional": false,
+            "field": "userId",
+            "description": "<p>Уникальный ключ юзера водителя .</p>"
+          },
+          {
+            "group": "Получаемые данные (courier)",
+            "type": "String",
+            "optional": false,
+            "field": "phone",
+            "description": "<p>Телефон водителя .</p>"
+          },
+          {
+            "group": "Получаемые данные (courier)",
+            "type": "String",
+            "optional": false,
+            "field": "transportId",
+            "description": "<p>Уникальный ключ транспорта (может быть null).</p>"
+          },
+          {
+            "group": "Получаемые данные (courier)",
+            "type": "String",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>Уникальный ключ водителя .</p>"
+          },
+          {
+            "group": "Получаемые данные (courier)",
+            "type": "Date",
+            "optional": false,
+            "field": "createdAt",
+            "description": "<p>Дата создания.</p>"
+          },
+          {
+            "group": "Получаемые данные (courier)",
+            "type": "String",
+            "optional": false,
+            "field": "createdUserId",
+            "description": "<p>userId создавшего диспетчера.</p>"
+          },
+          {
+            "group": "Получаемые данные (courier)",
+            "type": "Array",
+            "optional": false,
+            "field": "currentPosition",
+            "description": "<p>Текущая позиция водителя .</p>"
+          },
+          {
+            "group": "Получаемые данные (courier)",
+            "type": "String",
+            "optional": false,
+            "field": "imageUrl",
+            "description": "<p>url картинки.</p>"
+          },
+          {
+            "group": "Получаемые данные (courier)",
+            "type": "String",
+            "optional": false,
+            "field": "imei",
+            "description": "<p>imei водителя .</p>"
+          },
+          {
+            "group": "Получаемые данные (courier)",
+            "type": "String",
+            "optional": false,
+            "field": "password",
+            "description": "<p>пароль водителя .</p>"
+          },
+          {
+            "group": "Получаемые данные (courier)",
+            "type": "String",
+            "optional": false,
+            "field": "searchField",
+            "description": "<p>Информация по которой ищем водителя .</p>"
+          },
+          {
+            "group": "Получаемые данные (courier)",
+            "type": "String",
+            "allowedValues": [
+              "Online",
+              "Offline"
+            ],
+            "optional": false,
+            "field": "status",
+            "description": "<p>водитель пользуется приложением или нет.</p>"
+          }
+        ]
+      }
+    },
+    "name": "RetrieveCouriers",
+    "group": "Couriers",
+    "version": "0.1.0",
+    "description": "<p>GET запрос на получение водителей. Вы получите все данные относящиеся к водителю. Для выполнения запроса вам потребуется, api ключ(генерируется в системе).</p>",
+    "sampleRequest": [
+      {
+        "url": "https://app.relog.kz/api/v2/couriers"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Пример (Запрос):",
+        "content": "curl -i https://app.relog.kz/api/v2/couriers",
+        "type": "json"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status",
+            "description": "<p>Статус ответа.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "[Object]",
+            "optional": false,
+            "field": "couriers",
+            "description": "<p>Массив водителей.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Ответ(Пример):",
+          "content": "HTTP/1.1 200 Success\n{\n \"status\": \"success\",\n \"couriers\": [],\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "type": "String",
+            "optional": false,
+            "field": "status",
+            "description": "<p>Статус ответа.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Сообщение ошибки.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "type": "Number",
+            "optional": false,
+            "field": "error",
+            "description": "<p>Номер ошибки.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Ответ (Пример):",
+          "content": "HTTP/1.1 403 Forbidden\n{\n \"status\": \"error\",\n \"message\": \"no access\",\n \"error\": 403\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "server/endpoints/couriers.js",
+    "groupTitle": "Couriers"
+  },
+  {
+    "type": "get",
+    "url": "/goods",
+    "title": "Список товаров",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "allowedValues": [
+              "application/json",
+              "application/xml"
+            ],
+            "optional": true,
+            "field": "x-response-type",
+            "description": "<p>Формат вывода ответа (по умолчанию: application/json).</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Передаваемые параметры": [
+          {
+            "group": "Передаваемые параметры",
+            "type": "String",
+            "optional": false,
+            "field": "api_key",
+            "description": "<p>Уникальный api ключ.</p>"
+          },
+          {
+            "group": "Передаваемые параметры",
+            "type": "Int",
+            "optional": true,
+            "field": "code",
+            "description": "<p>Фильтр по номеру товара.</p>"
+          },
+          {
+            "group": "Передаваемые параметры",
+            "type": "String",
+            "optional": true,
+            "field": "name",
+            "description": "<p>Фильтр по названию товара</p>"
+          },
+          {
+            "group": "Передаваемые параметры",
+            "type": "Int",
+            "optional": true,
+            "field": "price",
+            "description": "<p>Фильтр по стоимости.</p>"
+          },
+          {
+            "group": "Передаваемые параметры",
+            "type": "Int",
+            "optional": true,
+            "field": "volume",
+            "description": "<p>Фильтр по объему.</p>"
+          },
+          {
+            "group": "Передаваемые параметры",
+            "type": "Int",
+            "optional": true,
+            "field": "weight",
+            "description": "<p>Фильтр по весу.</p>"
+          },
+          {
+            "group": "Передаваемые параметры",
+            "type": "Int",
+            "optional": true,
+            "field": "limit",
+            "description": "<p>Лимит по количеству товаров (по умолчанию 10).</p>"
+          }
+        ],
+        "Получаемые данные (good)": [
+          {
+            "group": "Получаемые данные (good)",
+            "type": "String",
+            "optional": false,
+            "field": "code",
+            "description": "<p>код товара.</p>"
+          },
+          {
+            "group": "Получаемые данные (good)",
+            "type": "String",
+            "optional": false,
+            "field": "companyId",
+            "description": "<p>Уникальный ключ компании.</p>"
+          },
+          {
+            "group": "Получаемые данные (good)",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>Название товара.</p>"
+          },
+          {
+            "group": "Получаемые данные (good)",
+            "type": "Number",
+            "optional": false,
+            "field": "caseCoefficient",
+            "description": "<p>Коэффициент кейса.</p>"
+          },
+          {
+            "group": "Получаемые данные (good)",
+            "type": "Number",
+            "optional": false,
+            "field": "price",
+            "description": "<p>Цена.</p>"
+          },
+          {
+            "group": "Получаемые данные (good)",
+            "type": "String",
+            "optional": false,
+            "field": "requiredSkill",
+            "description": "<p>Требуемый спец. транспорт.</p>"
+          },
+          {
+            "group": "Получаемые данные (good)",
+            "type": "String",
+            "optional": false,
+            "field": "searchField",
+            "description": "<p>Информация по которой ищем товар.</p>"
+          },
+          {
+            "group": "Получаемые данные (good)",
+            "type": "Number",
+            "optional": false,
+            "field": "volume",
+            "description": "<p>Объем.</p>"
+          },
+          {
+            "group": "Получаемые данные (good)",
+            "type": "Number",
+            "optional": false,
+            "field": "weight",
+            "description": "<p>Вес.</p>"
+          },
+          {
+            "group": "Получаемые данные (good)",
+            "type": "String",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>Уникальный ключ товара.</p>"
+          }
+        ]
+      }
+    },
+    "name": "RetrieveGoods",
+    "group": "Goods",
+    "version": "0.1.0",
+    "description": "<p>GET запрос на получение товаров. Вы получите все данные относящиеся к товару. Для выполнения запроса вам потребуется, api ключ(генерируется в системе).</p>",
+    "sampleRequest": [
+      {
+        "url": "https://app.relog.kz/api/v2/goods"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Пример (Запрос):",
+        "content": "curl -i https://app.relog.kz/api/v2/goods",
+        "type": "json"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status",
+            "description": "<p>Статус ответа.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "[Object]",
+            "optional": false,
+            "field": "goods",
+            "description": "<p>Массив товаров.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Ответ(Пример):",
+          "content": "HTTP/1.1 200 Success\n{\n \"status\": \"success\",\n \"goods\": [],\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "type": "String",
+            "optional": false,
+            "field": "status",
+            "description": "<p>Статус ответа.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Сообщение ошибки.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "type": "Number",
+            "optional": false,
+            "field": "error",
+            "description": "<p>Номер ошибки.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Ответ (Пример):",
+          "content": "HTTP/1.1 403 Forbidden\n{\n \"status\": \"error\",\n \"message\": \"no access\",\n \"error\": 403\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "server/endpoints/goods.js",
+    "groupTitle": "Goods"
+  },
+  {
+    "type": "post",
+    "url": "/goods",
+    "title": "Создание/Изменение товара",
+    "name": "insertGood",
+    "group": "Goods",
+    "version": "0.1.0",
+    "description": "<p>POST запрос на создание или изменение товара. Для этого вам нужны как минимум api ключ и товар.</p>",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "allowedValues": [
+              "application/json",
+              "application/xml"
+            ],
+            "optional": true,
+            "field": "x-response-type",
+            "description": "<p>Формат вывода ответа (по умолчанию: application/json).</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "api_key",
+            "description": "<p>Уникальный api ключ.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "good",
+            "description": "<p>Информация о товаре. Здесь содержится вся необходимая информация о товаре.</p>"
+          }
+        ],
+        "Параметры товара (good)": [
+          {
+            "group": "Параметры товара (good)",
+            "type": "String",
+            "optional": false,
+            "field": "code",
+            "description": "<p>Код товара.</p>"
+          },
+          {
+            "group": "Параметры товара (good)",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>Название товара.</p>"
+          },
+          {
+            "group": "Параметры товара (good)",
+            "type": "Int",
+            "optional": false,
+            "field": "weight",
+            "description": "<p>Вес товара (кг).</p>"
+          },
+          {
+            "group": "Параметры товара (good)",
+            "type": "Int",
+            "optional": false,
+            "field": "volume",
+            "description": "<p>Объем товара (м.куб).</p>"
+          },
+          {
+            "group": "Параметры товара (good)",
+            "type": "Int",
+            "optional": false,
+            "field": "requiredSkill",
+            "description": "<p>Категория товара (Для маршрутизации, для отделения товара от других категорий).</p>"
+          },
+          {
+            "group": "Параметры товара (good)",
+            "type": "String",
+            "optional": true,
+            "field": "_id",
+            "description": "<p>Уникальный id товара (при указании id, обновит существующий товар).</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "Запрос(Пример):",
+        "content": "curl -X POST \\\nhttps://app.relog.kz/api/v2/goods/ \\\n-H 'content-type: application/json' \\\n-d '{\n \"api_key\": \"xxxxxxxxxxxxxxxx\",\n \"good\": {\n   \"code\": \"132\",\n   \"name\": \"Носки\",\n   \"weight\": 5,\n   \"volume\": 10,\n   \"requiredSkill\": 1\n }\n}'",
+        "type": "json"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status",
+            "description": "<p>Статус ответа.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>Уникальный id товара.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Ответ (Пример):",
+          "content": "HTTP/1.1 200 Success\n{\n \"status\": \"success\",\n \"_id\": \"xxxxxxxxxxx\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "server/endpoints/goods.js",
+    "groupTitle": "Goods"
+  },
+  {
+    "type": "get",
+    "url": "/routes",
+    "title": "Список маршрутов",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "allowedValues": [
+              "application/json",
+              "application/xml"
+            ],
+            "optional": true,
+            "field": "x-response-type",
+            "description": "<p>Формат вывода ответа (по умолчанию: application/json).</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Передаваемые параметры": [
+          {
+            "group": "Передаваемые параметры",
+            "type": "String",
+            "optional": false,
+            "field": "api_key",
+            "description": "<p>Уникальный api ключ.</p>"
+          },
+          {
+            "group": "Передаваемые параметры",
+            "type": "String",
+            "allowedValues": [
+              "inprocess",
+              "finished"
+            ],
+            "optional": true,
+            "field": "status",
+            "description": "<p>Фильтр по статусу маршрута. default - &quot;inprocess&quot;</p>"
+          },
+          {
+            "group": "Передаваемые параметры",
+            "type": "String",
+            "optional": true,
+            "field": "courierId",
+            "description": "<p>Фильтр по водителю маршрута.</p>"
+          },
+          {
+            "group": "Передаваемые параметры",
+            "type": "String",
+            "optional": true,
+            "field": "_id",
+            "description": "<p>Фильтр по id маршрута.</p>"
+          },
+          {
+            "group": "Передаваемые параметры",
+            "type": "Int",
+            "optional": true,
+            "field": "limit",
+            "description": "<p>Лимит по количеству маршрутов (по умолчанию 10).</p>"
+          },
+          {
+            "group": "Передаваемые параметры",
+            "type": "Bool",
+            "optional": true,
+            "field": "includeDetails",
+            "description": "<p>Добавить в ответ детали заявок.</p>"
+          },
+          {
+            "group": "Передаваемые параметры",
+            "type": "Bool",
+            "optional": true,
+            "field": "includeCourierDetails",
+            "description": "<p>Добавить в ответ детали по водителю.</p>"
+          },
+          {
+            "group": "Передаваемые параметры",
+            "type": "Long",
+            "optional": true,
+            "field": "createdAtStart",
+            "description": "<p>Фильтр по дате создания (Начало отправленной даты, в миллисекундах).</p>"
+          },
+          {
+            "group": "Передаваемые параметры",
+            "type": "Long",
+            "optional": true,
+            "field": "createdAtEnd",
+            "description": "<p>Фильтр по дате создания (Конец отправленной даты, в миллисекундах).</p>"
+          },
+          {
+            "group": "Передаваемые параметры",
+            "type": "Long",
+            "optional": true,
+            "field": "startDateStart",
+            "description": "<p>Фильтр по дате начала маршурта (Начало отправленной даты, в миллисекундах).</p>"
+          },
+          {
+            "group": "Передаваемые параметры",
+            "type": "Long",
+            "optional": true,
+            "field": "startDateEnd",
+            "description": "<p>Фильтр по дате начала маршурта(Конец отправленной даты, в миллисекундах).</p>"
+          },
+          {
+            "group": "Передаваемые параметры",
+            "type": "Long",
+            "optional": true,
+            "field": "endDateStart",
+            "description": "<p>Фильтр по дате завершения маршурта (Начало отправленной даты, в миллисекундах).</p>"
+          },
+          {
+            "group": "Передаваемые параметры",
+            "type": "Long",
+            "optional": true,
+            "field": "endDateEnd",
+            "description": "<p>Фильтр по дате завершения маршурта (Конец отправленной даты, в миллисекундах).</p>"
+          }
+        ],
+        "Получаемые данные (route)": [
+          {
+            "group": "Получаемые данные (route)",
+            "type": "String",
+            "optional": false,
+            "field": "companyId",
+            "description": "<p>Уникальный ключ компании.</p>"
+          },
+          {
+            "group": "Получаемые данные (route)",
+            "type": "Number",
+            "optional": false,
+            "field": "appsCount",
+            "description": "<p>Количество заявок в маршруте.</p>"
+          },
+          {
+            "group": "Получаемые данные (route)",
+            "type": "Array",
+            "optional": false,
+            "field": "couriers",
+            "description": "<p>Водители в маршруте.</p>"
+          },
+          {
+            "group": "Получаемые данные (route)",
+            "type": "Date",
+            "optional": false,
+            "field": "createdAt",
+            "description": "<p>Дата создания.</p>"
+          },
+          {
+            "group": "Получаемые данные (route)",
+            "type": "Number",
+            "optional": false,
+            "field": "distance",
+            "description": "<p>Общая дистанция маршрута.</p>"
+          },
+          {
+            "group": "Получаемые данные (route)",
+            "type": "Date",
+            "optional": false,
+            "field": "startDate",
+            "description": "<p>Дата начала маршрута.</p>"
+          },
+          {
+            "group": "Получаемые данные (route)",
+            "type": "Date",
+            "optional": false,
+            "field": "endDate",
+            "description": "<p>Дата завершения маршрута.</p>"
+          },
+          {
+            "group": "Получаемые данные (route)",
+            "type": "String",
+            "optional": false,
+            "field": "status",
+            "description": "<p>Текущий статус маршрута.</p>"
+          },
+          {
+            "group": "Получаемые данные (route)",
+            "type": "Number",
+            "optional": false,
+            "field": "time",
+            "description": "<p>Необходимое время для завершения маршрута.</p>"
+          },
+          {
+            "group": "Получаемые данные (route)",
+            "type": "String",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>Уникальный ключ маршрута.</p>"
+          },
+          {
+            "group": "Получаемые данные (route)",
+            "type": "Array",
+            "optional": false,
+            "field": "apps",
+            "description": "<p>Детали заявок.</p>"
+          },
+          {
+            "group": "Получаемые данные (route)",
+            "type": "Array",
+            "optional": false,
+            "field": "couriersDetails",
+            "description": "<p>Доп. информация о водителей в маршруте.</p>"
+          }
+        ],
+        "Получаемые данные заявки (apps)": [
+          {
+            "group": "Получаемые данные заявки (apps)",
+            "type": "String",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>Уникальный ключ зaявки.</p>"
+          },
+          {
+            "group": "Получаемые данные заявки (apps)",
+            "type": "String",
+            "optional": false,
+            "field": "courierId",
+            "description": "<p>_id водителя.</p>"
+          },
+          {
+            "group": "Получаемые данные заявки (apps)",
+            "type": "Number",
+            "optional": false,
+            "field": "index",
+            "description": "<p>Последовательность заказа у водителя .</p>"
+          },
+          {
+            "group": "Получаемые данные заявки (apps)",
+            "type": "String",
+            "optional": false,
+            "field": "details",
+            "description": "<p>Сведения заявки.</p>"
+          },
+          {
+            "group": "Получаемые данные заявки (apps)",
+            "type": "String",
+            "optional": false,
+            "field": "externalId",
+            "description": "<p>Внешний id.</p>"
+          },
+          {
+            "group": "Получаемые данные заявки (apps)",
+            "type": "String",
+            "optional": false,
+            "field": "additionalInfo",
+            "description": "<p>Доп. информация по водителю.</p>"
+          }
+        ],
+        "Получаемые данные курьера (couriersDetails)": [
+          {
+            "group": "Получаемые данные курьера (couriersDetails)",
+            "type": "String",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>Уникальный ключ водителя.</p>"
+          },
+          {
+            "group": "Получаемые данные курьера (couriersDetails)",
+            "type": "String",
+            "optional": false,
+            "field": "email",
+            "description": "<p>Электронная почта водителя.</p>"
+          },
+          {
+            "group": "Получаемые данные курьера (couriersDetails)",
+            "type": "String",
+            "optional": false,
+            "field": "phone",
+            "description": "<p>Номер телефона водителя .</p>"
+          },
+          {
+            "group": "Получаемые данные курьера (couriersDetails)",
+            "type": "String",
+            "optional": false,
+            "field": "fullName",
+            "description": "<p>ФИО водителя.</p>"
+          },
+          {
+            "group": "Получаемые данные курьера (couriersDetails)",
+            "type": "String",
+            "optional": false,
+            "field": "additionalInfo",
+            "description": "<p>Доп. информация по водителю.</p>"
+          }
+        ]
+      }
+    },
+    "name": "RetrieveRoutes",
+    "group": "Routes",
+    "version": "0.1.0",
+    "description": "<p>GET запрос на получение списка маршрутов. Вы получите все данные относящиеся к маршрутам. Для выполнения запроса вам потребуется, api ключ(генерируется в системе).</p>",
+    "sampleRequest": [
+      {
+        "url": "https://app.relog.kz/api/v2/routes"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Пример (Запрос):",
+        "content": "curl -i https://app.relog.kz/api/v2/routes",
+        "type": "json"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status",
+            "description": "<p>Статус ответа.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "[Object]",
+            "optional": false,
+            "field": "routes",
+            "description": "<p>Массив маршрутов.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Ответ(Пример):",
+          "content": "HTTP/1.1 200 Success\n{\n \"status\": \"success\",\n \"routes\": [],\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "type": "String",
+            "optional": false,
+            "field": "status",
+            "description": "<p>Статус ответа.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Сообщение ошибки.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "type": "Number",
+            "optional": false,
+            "field": "error",
+            "description": "<p>Номер ошибки.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Ответ (Пример):",
+          "content": "HTTP/1.1 403 Forbidden\n{\n \"status\": \"error\",\n \"message\": \"no access\",\n \"error\": 403\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "server/endpoints/routes.js",
+    "groupTitle": "Routes"
+  },
+  {
+    "type": "delete",
+    "url": "/transports",
+    "title": "Удаление транспорта",
+    "name": "DeleteTransport",
+    "group": "Transports",
+    "version": "0.1.0",
+    "description": "<p>DELETE запрос на удаление одного транспорта . Для этого вам нужны api ключ и id транспорта.</p>",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "allowedValues": [
+              "application/json",
+              "application/xml"
+            ],
+            "optional": true,
+            "field": "x-response-type",
+            "description": "<p>Формат вывода ответа (по умолчанию: application/json).</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "api_key",
+            "description": "<p>Уникальный api ключ.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "data",
+            "description": "<p>id идентификатор транспорта.</p>"
+          }
+        ],
+        "Параметры заявки (data)": [
+          {
+            "group": "Параметры заявки (data)",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p>id Идентификатор, по которому будет происходить удаление транспорта.</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "Запрос (Пример):",
+        "content": "curl -X DELETE \\\nhttps://app.relog.kz/api/v2/transports \\\n-H 'content-type: application/json' \\\n-d '{\n \"api_key\": \"xxxxxxxxxxxxxx\",\n \"data\": {\n     \"id\": \"xxxxxxxxxxxx\"\n  }\n}'",
+        "type": "json"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status",
+            "description": "<p>Статус ответа.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Сообщение .</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Ответ (Пример):",
+          "content": "HTTP/1.1 200 Success\n{\n \"status\": \"success\",\n \"message\": \"Transport was successfully removed\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "server/endpoints/transports.js",
+    "groupTitle": "Transports"
+  },
+  {
+    "type": "get",
+    "url": "/transports",
+    "title": "Список транспортов",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "allowedValues": [
+              "application/json",
+              "application/xml"
+            ],
+            "optional": true,
+            "field": "x-response-type",
+            "description": "<p>Формат вывода ответа (по умолчанию: application/json).</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Передаваемые параметры": [
+          {
+            "group": "Передаваемые параметры",
+            "type": "String",
+            "optional": false,
+            "field": "api_key",
+            "description": "<p>Уникальный api ключ.</p>"
+          },
+          {
+            "group": "Передаваемые параметры",
+            "type": "String",
+            "optional": true,
+            "field": "_id",
+            "description": "<p>Фильтр по id транспорта.</p>"
+          },
+          {
+            "group": "Передаваемые параметры",
+            "type": "String",
+            "optional": true,
+            "field": "brand",
+            "description": "<p>Фильтр по марке транспорта.</p>"
+          },
+          {
+            "group": "Передаваемые параметры",
+            "type": "String",
+            "optional": true,
+            "field": "carType",
+            "description": "<p>Фильтр по типу транспорта.</p>"
+          },
+          {
+            "group": "Передаваемые параметры",
+            "type": "String",
+            "optional": true,
+            "field": "stateNumber",
+            "description": "<p>Фильтр по гос. номеру транспорта .</p>"
+          },
+          {
+            "group": "Передаваемые параметры",
+            "type": "Int",
+            "optional": true,
+            "field": "limit",
+            "description": "<p>Лимит по количеству статусов (по умолчанию 10).</p>"
+          }
+        ],
+        "Получаемые данные (transport)": [
+          {
+            "group": "Получаемые данные (transport)",
+            "type": "String",
+            "optional": false,
+            "field": "companyId",
+            "description": "<p>Уникальный ключ компании.</p>"
+          },
+          {
+            "group": "Получаемые данные (transport)",
+            "type": "String",
+            "allowedValues": [
+              "default",
+              "truck",
+              "pedestrian",
+              "bicycle"
+            ],
+            "optional": false,
+            "field": "carType",
+            "description": "<p>Тип машины.</p>"
+          },
+          {
+            "group": "Получаемые данные (transport)",
+            "type": "String",
+            "optional": false,
+            "field": "createdUserId",
+            "description": "<p>userId создавшего диспетчера.</p>"
+          },
+          {
+            "group": "Получаемые данные (transport)",
+            "type": "Number",
+            "optional": false,
+            "field": "costPerDistance",
+            "description": "<p>Стоимость бензина на км.</p>"
+          },
+          {
+            "group": "Получаемые данные (transport)",
+            "type": "String",
+            "optional": false,
+            "field": "pallet",
+            "description": "<p>паллет.</p>"
+          },
+          {
+            "group": "Получаемые данные (transport)",
+            "type": "Bool",
+            "optional": false,
+            "field": "isHired",
+            "description": "<p>Наемный транспорт.</p>"
+          },
+          {
+            "group": "Получаемые данные (transport)",
+            "type": "Number",
+            "optional": false,
+            "field": "maxVolume",
+            "description": "<p>Грузоподъемность, объем (м3).</p>"
+          },
+          {
+            "group": "Получаемые данные (transport)",
+            "type": "Number",
+            "optional": false,
+            "field": "maxWeight",
+            "description": "<p>Грузоподъемность, вес (кг).</p>"
+          },
+          {
+            "group": "Получаемые данные (transport)",
+            "type": "String",
+            "optional": false,
+            "field": "transportSkill",
+            "description": "<p>Категория спец. транспорта.</p>"
+          },
+          {
+            "group": "Получаемые данные (transport)",
+            "type": "String",
+            "optional": false,
+            "field": "stateNumber",
+            "description": "<p>Гос. номер транспорта.</p>"
+          },
+          {
+            "group": "Получаемые данные (transport)",
+            "type": "String",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>Уникальный ключ транспорта.</p>"
+          }
+        ]
+      }
+    },
+    "name": "RetrieveTransports",
+    "group": "Transports",
+    "version": "0.1.0",
+    "description": "<p>GET запрос на получение транспортов. Вы получите все данные относящиеся к транспортам. Для выполнения запроса вам потребуется api ключ(генерируется в системе).</p>",
+    "sampleRequest": [
+      {
+        "url": "https://app.relog.kz/api/v2/transports"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Пример (Запрос):",
+        "content": "curl -i https://app.relog.kz/api/v2/transports",
+        "type": "json"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status",
+            "description": "<p>Статус ответа.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "[Object]",
+            "optional": false,
+            "field": "transports",
+            "description": "<p>Массив статусов.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Ответ(Пример):",
+          "content": "HTTP/1.1 200 Success\n{\n \"status\": \"success\",\n \"transports\": [],\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "type": "String",
+            "optional": false,
+            "field": "status",
+            "description": "<p>Статус ответа.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Сообщение ошибки.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "type": "Number",
+            "optional": false,
+            "field": "error",
+            "description": "<p>Номер ошибки.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Ответ (Пример):",
+          "content": "HTTP/1.1 403 Forbidden\n{\n \"status\": \"error\",\n \"message\": \"no access\",\n \"error\": 403\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "server/endpoints/transports.js",
+    "groupTitle": "Transports"
+  },
+  {
+    "type": "post",
+    "url": "/transports",
+    "title": "Создание/Изменение транспорта",
+    "name": "insertUpdateTransport",
+    "group": "Transports",
+    "version": "0.1.0",
+    "description": "<p>POST запрос на создание или изменение транспорта. Для этого вам нужны как минимум api ключ и данные транспорта.</p>",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "allowedValues": [
+              "application/json",
+              "application/xml"
+            ],
+            "optional": true,
+            "field": "x-response-type",
+            "description": "<p>Формат вывода ответа (по умолчанию: application/json).</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "api_key",
+            "description": "<p>Уникальный api ключ.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "transport",
+            "description": "<p>Информация о транспорте. Здесь содержится вся необходимая информация о транспорте.</p>"
+          }
+        ],
+        "Параметры транспорта (transport)": [
+          {
+            "group": "Параметры транспорта (transport)",
+            "type": "String",
+            "optional": false,
+            "field": "brand",
+            "description": "<p>Марка транспорта.</p>"
+          },
+          {
+            "group": "Параметры транспорта (transport)",
+            "type": "String",
+            "allowedValues": [
+              "default",
+              "truck",
+              "bicycle",
+              "pedestrian"
+            ],
+            "optional": false,
+            "field": "carType",
+            "description": "<p>Тип транспорта( default - обычная машина, truck - грузовик, bicycle - мотоцикл/мопед, pedestrian - пеший ).</p>"
+          },
+          {
+            "group": "Параметры транспорта (transport)",
+            "type": "String",
+            "optional": false,
+            "field": "costPerDistance",
+            "description": "<p>Стоимость бензина на км.</p>"
+          },
+          {
+            "group": "Параметры транспорта (transport)",
+            "type": "Boolean",
+            "allowedValues": [
+              "true",
+              "false"
+            ],
+            "optional": false,
+            "field": "isHired",
+            "description": "<p>Наемный транспорт( true: наемный, false: не наемный ).</p>"
+          },
+          {
+            "group": "Параметры транспорта (transport)",
+            "type": "Int",
+            "optional": false,
+            "field": "maxVolume",
+            "description": "<p>Грузоподъемность(объём, м.куб) транспорта.</p>"
+          },
+          {
+            "group": "Параметры транспорта (transport)",
+            "type": "Int",
+            "optional": false,
+            "field": "maxWeight",
+            "description": "<p>Грузоподъемность(вес, кг) транспорта.</p>"
+          },
+          {
+            "group": "Параметры транспорта (transport)",
+            "type": "String",
+            "optional": true,
+            "field": "pallet",
+            "description": "<p>Паллет транспорта.</p>"
+          },
+          {
+            "group": "Параметры транспорта (transport)",
+            "type": "String",
+            "optional": false,
+            "field": "stateNumber",
+            "description": "<p>Гос. номер транспорта.</p>"
+          },
+          {
+            "group": "Параметры транспорта (transport)",
+            "type": "String",
+            "optional": false,
+            "field": "transportSkill",
+            "description": "<p>Категория спец. транспорта.</p>"
+          },
+          {
+            "group": "Параметры транспорта (transport)",
+            "type": "String",
+            "optional": true,
+            "field": "_id",
+            "description": "<p>Уникальный id транспорта (при указании id, обновит существующий транспорт).</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "Запрос(Пример):",
+        "content": "curl -X POST \\\nhttps://app.relog.kz/api/v2/transports/ \\\n-H 'content-type: application/json' \\\n-d '{\n \"api_key\": \"xxxxxxxxxxxxxxxx\",\n \"transport\": {\n   \"brand\": \"volvo\",\n   \"carType\": \"default\",\n   \"costPerDistance\": \"1\",\n   \"maxVolume\": 10,\n   \"maxWeight\": 5,\n   \"isHired\": false,\n   \"pallet\": \"1\",\n   \"stateNumber\": \"451 VBS 02\",\n   \"transportSkill\": 1\n }\n}'",
+        "type": "json"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status",
+            "description": "<p>Статус ответа.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>Уникальный id транспорта.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Ответ (Пример):",
+          "content": "HTTP/1.1 200 Success\n{\n \"status\": \"success\",\n \"_id\": \"xxxxxxxxxxx\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "server/endpoints/transports.js",
+    "groupTitle": "Transports"
+  },
+  {
+    "type": "get",
+    "url": "/priceTypes",
+    "title": "Список типов оплаты",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "allowedValues": [
+              "application/json",
+              "application/xml"
+            ],
+            "optional": true,
+            "field": "x-response-type",
+            "description": "<p>Формат вывода ответа (по умолчанию: application/json).</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Передаваемые параметры": [
+          {
+            "group": "Передаваемые параметры",
+            "type": "String",
+            "optional": false,
+            "field": "api_key",
+            "description": "<p>Уникальный api ключ.</p>"
+          },
+          {
+            "group": "Передаваемые параметры",
+            "type": "Boolean",
+            "optional": true,
+            "field": "isDefault",
+            "description": "<p>Фильтр, основной или нет.</p>"
+          },
+          {
+            "group": "Передаваемые параметры",
+            "type": "String",
+            "optional": true,
+            "field": "name",
+            "description": "<p>Фильтр по названию типа оплаты.</p>"
+          },
+          {
+            "group": "Передаваемые параметры",
+            "type": "String",
+            "optional": true,
+            "field": "_id",
+            "description": "<p>Фильтр по id типа оплаты.</p>"
+          },
+          {
+            "group": "Передаваемые параметры",
+            "type": "Int",
+            "optional": true,
+            "field": "limit",
+            "description": "<p>Лимит по количеству типов оплаты (по умолчанию 10).</p>"
+          }
+        ],
+        "Получаемые данные (priceType)": [
+          {
+            "group": "Получаемые данные (priceType)",
+            "type": "String",
+            "optional": false,
+            "field": "companyId",
+            "description": "<p>Уникальный ключ компании.</p>"
+          },
+          {
+            "group": "Получаемые данные (priceType)",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>Название типа оплаты.</p>"
+          },
+          {
+            "group": "Получаемые данные (priceType)",
+            "type": "String",
+            "optional": false,
+            "field": "createdUserId",
+            "description": "<p>userId создавшего диспетчера.</p>"
+          },
+          {
+            "group": "Получаемые данные (priceType)",
+            "type": "Bool",
+            "optional": false,
+            "field": "isDefault",
+            "description": "<p>По умолчанию активный.</p>"
+          },
+          {
+            "group": "Получаемые данные (priceType)",
+            "type": "Bool",
+            "optional": false,
+            "field": "isRemovable",
+            "description": "<p>удаляемый.</p>"
+          },
+          {
+            "group": "Получаемые данные (priceType)",
+            "type": "String",
+            "optional": false,
+            "field": "searchField",
+            "description": "<p>Информация по которой ищем товар.</p>"
+          },
+          {
+            "group": "Получаемые данные (priceType)",
+            "type": "String",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>Уникальный ключ типа оплаты.</p>"
+          }
+        ]
+      }
+    },
+    "name": "RetrievePriceTypes",
+    "group": "priceTypes",
+    "version": "0.1.0",
+    "description": "<p>GET запрос на получение типов оплаты. Вы получите все данные относящиеся к типам оплаты. Для выполнения запроса вам потребуется, api ключ(генерируется в системе).</p>",
+    "sampleRequest": [
+      {
+        "url": "https://app.relog.kz/api/v2/priceTypes"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Пример (Запрос):",
+        "content": "curl -i https://app.relog.kz/api/v2/priceTypes",
+        "type": "json"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status",
+            "description": "<p>Статус ответа.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "[Object]",
+            "optional": false,
+            "field": "priceTypes",
+            "description": "<p>Массив типов оплаты.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Ответ(Пример):",
+          "content": "HTTP/1.1 200 Success\n{\n \"status\": \"success\",\n \"priceTypes\": [],\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "type": "String",
+            "optional": false,
+            "field": "status",
+            "description": "<p>Статус ответа.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Сообщение ошибки.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "type": "Number",
+            "optional": false,
+            "field": "error",
+            "description": "<p>Номер ошибки.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Ответ (Пример):",
+          "content": "HTTP/1.1 403 Forbidden\n{\n \"status\": \"error\",\n \"message\": \"no access\",\n \"error\": 403\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "server/endpoints/priceTypes.js",
+    "groupTitle": "priceTypes"
+  },
+  {
+    "type": "get",
+    "url": "/statuses",
+    "title": "Список статусов",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "allowedValues": [
+              "application/json",
+              "application/xml"
+            ],
+            "optional": true,
+            "field": "x-response-type",
+            "description": "<p>Формат вывода ответа (по умолчанию: application/json).</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Передаваемые параметры": [
+          {
+            "group": "Передаваемые параметры",
+            "type": "String",
+            "optional": false,
+            "field": "api_key",
+            "description": "<p>Уникальный api ключ.</p>"
+          },
+          {
+            "group": "Передаваемые параметры",
+            "type": "String",
+            "optional": true,
+            "field": "group",
+            "description": "<p>Фильтр по группе статуса (new, inprocess, finished).</p>"
+          },
+          {
+            "group": "Передаваемые параметры",
+            "type": "String",
+            "optional": true,
+            "field": "_id",
+            "description": "<p>Фильтр по id статуса.</p>"
+          },
+          {
+            "group": "Передаваемые параметры",
+            "type": "Int",
+            "optional": true,
+            "field": "limit",
+            "description": "<p>Лимит по количеству статусов (по умолчанию 10).</p>"
+          }
+        ],
+        "Получаемые данные (status)": [
+          {
+            "group": "Получаемые данные (status)",
+            "type": "String",
+            "optional": false,
+            "field": "companyId",
+            "description": "<p>Уникальный ключ компании.</p>"
+          },
+          {
+            "group": "Получаемые данные (status)",
+            "type": "String",
+            "allowedValues": [
+              "new",
+              "inprocess",
+              "finished"
+            ],
+            "optional": false,
+            "field": "group",
+            "description": "<p>Какой группе относится статус.</p>"
+          },
+          {
+            "group": "Получаемые данные (status)",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>Название статуса.</p>"
+          },
+          {
+            "group": "Получаемые данные (status)",
+            "type": "String",
+            "optional": false,
+            "field": "type",
+            "description": "<p>Тип статуса.</p>"
+          },
+          {
+            "group": "Получаемые данные (status)",
+            "type": "String",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>Уникальный ключ статуса.</p>"
+          }
+        ]
+      }
+    },
+    "name": "RetrieveStatuses",
+    "group": "statuses",
+    "version": "0.1.0",
+    "description": "<p>GET запрос на получение статусов. Вы получите все данные относящиеся к статусам. Для выполнения запроса вам потребуется api ключ(генерируется в системе).</p>",
+    "sampleRequest": [
+      {
+        "url": "https://app.relog.kz/api/v2/statuses"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Пример (Запрос):",
+        "content": "curl -i https://app.relog.kz/api/v2/statuses",
+        "type": "json"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status",
+            "description": "<p>Статус ответа.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "[Object]",
+            "optional": false,
+            "field": "statuses",
+            "description": "<p>Массив статусов.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Ответ(Пример):",
+          "content": "HTTP/1.1 200 Success\n{\n \"status\": \"success\",\n \"statuses\": [],\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "type": "String",
+            "optional": false,
+            "field": "status",
+            "description": "<p>Статус ответа.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Сообщение ошибки.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "type": "Number",
+            "optional": false,
+            "field": "error",
+            "description": "<p>Номер ошибки.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Ответ (Пример):",
+          "content": "HTTP/1.1 403 Forbidden\n{\n \"status\": \"error\",\n \"message\": \"no access\",\n \"error\": 403\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "server/endpoints/statuses.js",
+    "groupTitle": "statuses"
+  }
+] });
